@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user.ts";
 import { onMounted } from "vue";
-import AuthApi from "@/Service/API/auth.ts";
+import AuthApi from "@/Service/API/auth";
 import { useRouter } from "vue-router";
 
 const router = useRouter();

@@ -3,7 +3,7 @@
     <ul class="sidebar-list">
       <li class="sidebar-item">Лента</li>
       <li class="sidebar-item">Сообщения</li>
-      <router-link to="/find-peoples" class="sidebar-item">Найти людей</router-link>
+      <router-link to="/search" class="sidebar-item">Найти людей</router-link>
       <li class="sidebar-item">Друзья</li>
     </ul>
   </div>

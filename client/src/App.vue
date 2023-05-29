@@ -4,10 +4,9 @@ import LeftSidebar from "@/components/Sidebar/LeftSidebar.vue";
 import { onMounted, onUpdated, ref } from "vue";
 import { useUserStore } from "@/stores/user.ts";
 import {useFriendStore} from '@/stores/friends.ts'
-import AuthApi from "@/Service/API/auth.ts";
+import AuthApi from "@/Service/API/auth";
 import FriendApi from '@/Service/API/friends.ts'
 import AppHeader from "@/components/AppHeader/AppHeader.vue";
-import LoginForm from "@/components/LoginForm/LoginForm.vue";
 
 const userStore = useUserStore();
 const friendStore = useFriendStore();
@@ -18,6 +17,8 @@ onMounted(async () => {
   if (token) {
     const user = await AuthApi.loginOnPageLoad(token);
     await userStore.setUser(user.rows[0]);
+  } else {
+    router.push('/auth/login');
   }
 });
 </script>
@@ -25,14 +26,11 @@ onMounted(async () => {
 <template>
   <app-header />
   <main class="main">
-    <div v-if="userStore.isLogined">
+    <div>
       <left-sidebar v-if="userStore.isLogined" />
       <div :class="{ content: userStore.isLogined, 'content-not-auth': !userStore.isLogined }">
-        <RouterView />
+        <router-view />
       </div>
-    </div>
-    <div v-else>
-      <login-form />
     </div>
   </main>
 </template>

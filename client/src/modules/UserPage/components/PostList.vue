@@ -19,7 +19,7 @@
 import { onMounted, ref, watch } from "vue";
 import { useUserStore } from "@/stores/user.ts";
 import { useRoute } from "vue-router";
-import PostsApi from "@/Service/API/posts.ts";
+import PostsApi from "@/modules/UserPage/API/posts.ts";
 
 const userStore = useUserStore();
 const route = useRoute();

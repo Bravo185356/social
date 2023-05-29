@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <router-link to="/" class="title">Social</router-link>
-    <router-link :to="{ path: store.isLogined ? '/profile' : '/login' }"
+    <router-link :to="{ path: store.isLogined ? '/profile' : '/auth/login' }"
       ><v-btn :variant="buttonType">{{ buttonText }}</v-btn></router-link
     >
   </header>

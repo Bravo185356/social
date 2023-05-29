@@ -47,10 +47,10 @@ import { ref, computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useUserStore } from "@/stores/user.ts";
 import { useFriendStore } from "@/stores/friends.ts";
-import PostList from "@/components/PostList/PostList.vue";
-import AuthApi from "@/Service/API/auth.ts";
+import PostList from "../components/PostList.vue";
+import AuthApi from "@/Service/API/auth";
 import { getImageUrl } from "@/helpers/getImageUrl.ts";
-import AvatarApi from "@/Service/API/avatar.ts";
+import AvatarApi from "@/modules/UserPage/API/avatar";
 import UserApi from "@/Service/API/users.ts";
 import FriendApi from "@/Service/API/friends.ts";
 
@@ -74,18 +74,24 @@ async function updateAvatar() {
 
   user.value.img = await AvatarApi.updateAvatar(formData);
 }
+async function getUserInfo(id) {
+  const info = await UserApi.getUserInfo(id);
+  user.value = info;
+  const friendList = await FriendApi.getMyFriends(id);
+  friends.value = friendList;
+}
 watch(
   () => route.params.id,
   async (newId) => {
     if (userStore.isLogined && newId) {
-      const info = await UserApi.getUserInfo(newId);
-      user.value = info;
-      const friendList = await FriendApi.getMyFriends(newId);
-      friends.value = friendList;
+      getUserInfo(newId)
     }
   },
   { immediate: true }
 );
+onMounted(async () => {
+  getUserInfo(route.params.id)
+});
 </script>
 
 <style lang="scss">
