@@ -11,10 +11,10 @@
 import { onMounted, ref, computed } from "vue";
 import { useUserStore } from "@/stores/user.ts";
 import { useFriendStore } from "@/stores/friends.ts";
-import FilterSidebar from "@/components/FilterSidebar/FilterSidebar.vue";
-import UserApi from "@/Service/API/users.ts";
+import FilterSidebar from "@/modules/Search/components/FilterSidebar.vue";
+import SearchApi from "../API/SearchApi.ts";
 import FriendApi from "@/Service/API/friends.ts";
-import UserItem from './Components/UserItem/UserItem.vue'
+import UserItem from '@/modules/Search/components/UserItem.vue'
 
 const userStore = useUserStore();
 const friendStore = useFriendStore();
@@ -22,7 +22,7 @@ const friendStore = useFriendStore();
 const users = ref([]);
 
 onMounted(async () => {
-  const userList = await UserApi.getAllUsers();
+  const userList = await SearchApi.getAllUsers();
   users.value = userList.rows;
   const friendList = await FriendApi.getMyFriends(userStore.getUser.id);
   await friendStore.setFriends(friendList);

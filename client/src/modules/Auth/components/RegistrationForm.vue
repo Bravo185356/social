@@ -10,7 +10,7 @@
   </v-form>
 </template>
 <script setup lang="ts">
-import AuthApi from "@/Service/API/auth.ts";
+import AuthApi from "@/Service/API/auth";
 import { ref } from "vue";
 
 const firstName = ref("");

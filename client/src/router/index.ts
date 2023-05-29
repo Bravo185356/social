@@ -1,11 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
-import RegistrationPage from "@/views/RegistrationPage/RegistrationPage.vue";
-import LoginPage from "@/views/LoginPage/LoginPage.vue";
 import ProfilePage from "@/views/ProfilePage/ProfilePage.vue";
-import FindPeoplesPage from "@/views/FindPeoplesPage/FindPeoplesPage.vue";
-import UserPage from '@/views/UserPage/UserPage.vue'
+import UserPage from '@/modules/UserPage/views/UserPage.vue'
 import RootPage from '@/views/RootPage/RootPage.vue'
-import App from '@/App.vue'
+import AuthRoutes from '@/modules/Auth/index'
+import SearchRoutes from '@/modules/Search/index'
+import UserRoutes from '@/modules/UserPage/index'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -16,31 +15,14 @@ const router = createRouter({
       component: RootPage,
     },
     {
-      path: "/:id",
-      name: "userPage",
-      component: UserPage,
-    },
-    {
-      path: "/registration",
-      name: "registration",
-      component: RegistrationPage,
-    },
-    {
-      path: "/login",
-      name: "login",
-      component: LoginPage,
-    },
-    {
       path: "/profile",
       name: "profile",
       component: ProfilePage,
-    },
-    {
-      path: "/find-peoples",
-      name: "find-peoples",
-      component: FindPeoplesPage,
-    },
+    }
   ],
 });
+router.addRoute(AuthRoutes)
+router.addRoute(SearchRoutes)
+router.addRoute(UserRoutes)
 
 export default router;
