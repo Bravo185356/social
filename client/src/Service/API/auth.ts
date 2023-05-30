@@ -23,11 +23,9 @@ export default class AuthApi {
       }),
     });
     const data = await response.json();
-    console.log(data);
     return data;
   }
   static async loginOnPageLoad(token: string) {
-    console.log(token)
     const response = await fetch("http://localhost:8080/api/login", {
       method: "POST",
       headers: {
@@ -41,7 +39,7 @@ export default class AuthApi {
     return data;
   }
   static async createUser({ name, surname, login, password, city }: CreateUserProps) {
-    const response = await fetch(`http://localhost:8080/api/create`, {
+    await fetch(`http://localhost:8080/api/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -54,8 +52,5 @@ export default class AuthApi {
         city,
       }),
     });
-    const user = await response.json();
-    console.log(user.rows[0]);
-    return 
   }
 }
