@@ -10,7 +10,6 @@
         <div>Город: {{ user.city }}</div>
       </div>
     </div>
-    <v-btn @click="addFriend(user)" v-if="user.id !== userStore.getUser.id && !isMyFriend">Добавить в друзья</v-btn>
   </div>
 </template>
 <script setup lang="ts">
@@ -23,29 +22,22 @@ import { getImageUrl } from "@/helpers/getImageUrl.ts";
 const props = defineProps({
   user: { type: Object },
 });
-const userStore = useUserStore();
-const friendStore = useFriendStore();
+// const userStore = useUserStore();
 
-async function addFriend(user) {
-  const response = await fetch("http://localhost:8080/api/add-friend", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      user,
-      id: userStore.getUser.id,
-    }),
-  });
-  const data = await response.json()
-  friendStore.addUserToFriendList(data);
-}
+// async function addFriend(user) {
+//   const response = await fetch("http://localhost:8080/api/add-friend", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       user,
+//       id: userStore.getUser.id,
+//     }),
+//   });
+//   const data = await response.json()
+// }
 
-const isMyFriend = computed(() => {
-  if (friendStore.getFriendList.length) {
-    return friendStore.getFriendList.find((friend) => friend.id === props.user.id);
-  }
-});
 </script>
 <style>
 .user-body {

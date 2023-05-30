@@ -1,10 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
 import ProfilePage from "@/views/ProfilePage/ProfilePage.vue";
 import UserPage from '@/modules/UserPage/views/UserPage.vue'
-import RootPage from '@/views/RootPage/RootPage.vue'
+import RootPage from '@/views/RootPage.vue'
 import AuthRoutes from '@/modules/Auth/index'
 import SearchRoutes from '@/modules/Search/index'
 import UserRoutes from '@/modules/UserPage/index'
+import App from '@/App.vue'
+import { useUserStore } from "@/stores/user";
+import AuthApi from '@/Service/API/auth'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -13,6 +16,14 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: RootPage,
+      beforeEnter: async (to, from) => {
+        console.log('redirect')
+        const userStore = useUserStore()
+        
+        if(userStore.isLogined) {
+          return `/${userStore.getUser.id}`
+        }
+      }
     },
     {
       path: "/profile",
@@ -24,5 +35,13 @@ const router = createRouter({
 router.addRoute(AuthRoutes)
 router.addRoute(SearchRoutes)
 router.addRoute(UserRoutes)
+
+router.beforeEach(async () => {
+  console.log('auth')
+  const userStore = useUserStore()
+  const token = localStorage.getItem('token')
+  const user = await AuthApi.loginOnPageLoad(token!);
+  await userStore.setUser(user.rows[0]);
+})
 
 export default router;

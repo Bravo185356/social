@@ -1,30 +1,5 @@
-<script setup lang="ts">
-import { useRouter } from "vue-router";
-import LeftSidebar from "@/components/Sidebar/LeftSidebar.vue";
-import { onMounted, onUpdated, ref } from "vue";
-import { useUserStore } from "@/stores/user.ts";
-import {useFriendStore} from '@/stores/friends.ts'
-import AuthApi from "@/Service/API/auth";
-import FriendApi from '@/Service/API/friends.ts'
-import AppHeader from "@/components/AppHeader/AppHeader.vue";
-
-const userStore = useUserStore();
-const friendStore = useFriendStore();
-const router = useRouter();
-
-onMounted(async () => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    const user = await AuthApi.loginOnPageLoad(token);
-    await userStore.setUser(user.rows[0]);
-  } else {
-    router.push('/auth/login');
-  }
-});
-</script>
-
 <template>
-  <app-header />
+  <app-header :notifications="notifications" />
   <main class="main">
     <div>
       <left-sidebar v-if="userStore.isLogined" />
@@ -34,6 +9,34 @@ onMounted(async () => {
     </div>
   </main>
 </template>
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+import LeftSidebar from "@/components/Sidebar/LeftSidebar.vue";
+import { onMounted, onUpdated, ref } from "vue";
+import { useUserStore } from "@/stores/user.ts";
+import { useFriendStore } from "@/stores/friends.ts";
+import AuthApi from "@/Service/API/auth";
+import AppHeader from "@/components/AppHeader/AppHeader.vue";
+import RequestsApi from "@/Service/API/requests.ts";
+
+const userStore = useUserStore();
+const friendStore = useFriendStore();
+
+const router = useRouter();
+
+const notifications = ref([]);
+
+onMounted(async () => {
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    const notificationsList = await RequestsApi.getAlert(token);
+    notifications.value = notificationsList;
+  } else {
+    router.push("/auth/login");
+  }
+});
+</script>
 
 <style lang="scss">
 * {

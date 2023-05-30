@@ -23,6 +23,9 @@
         <div class="status">status</div>
         <div class="city">Город {{ user.city }}</div>
       </div>
+      <div>
+        <v-btn @click="sendFriendRequest">Добавить в друзья</v-btn>
+      </div>
     </div>
     <div class="profile-body">
       <div class="friends">
@@ -80,17 +83,21 @@ async function getUserInfo(id) {
   const friendList = await FriendApi.getMyFriends(id);
   friends.value = friendList;
 }
+async function sendFriendRequest() {
+  await FriendApi.addFriend(userStore.getUser.id, route.params.id);
+}
+
 watch(
   () => route.params.id,
   async (newId) => {
     if (userStore.isLogined && newId) {
-      getUserInfo(newId)
+      getUserInfo(newId);
     }
   },
   { immediate: true }
 );
 onMounted(async () => {
-  getUserInfo(route.params.id)
+  getUserInfo(route.params.id);
 });
 </script>
 

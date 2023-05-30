@@ -1,5 +1,6 @@
-import { ref, computed } from "vue";
+import { ref, computed, type ComputedRef } from "vue";
 import { defineStore } from "pinia";
+
 // CURRENT USER (AUTH)
 export const useUserStore = defineStore("user", () => {
   const user = ref({});
@@ -7,7 +8,6 @@ export const useUserStore = defineStore("user", () => {
 
   async function setUser(userInfo: any) {
     user.value = userInfo;
-    console.log(user.value)
     isLogined.value = true
   }
   function $reset() {
@@ -15,7 +15,7 @@ export const useUserStore = defineStore("user", () => {
     isLogined.value = false
   }
   const getIsLogined = computed(() => isLogined.value);
-  const getUser = computed(() => user.value);
+  const getUser:any = computed(() => user.value);
 
   return { user, setUser, getUser, isLogined, getIsLogined, $reset };
 });

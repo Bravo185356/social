@@ -17,15 +17,12 @@ import FriendApi from "@/Service/API/friends.ts";
 import UserItem from '@/modules/Search/components/UserItem.vue'
 
 const userStore = useUserStore();
-const friendStore = useFriendStore();
 
 const users = ref([]);
 
 onMounted(async () => {
   const userList = await SearchApi.getAllUsers();
   users.value = userList.rows;
-  const friendList = await FriendApi.getMyFriends(userStore.getUser.id);
-  await friendStore.setFriends(friendList);
 });
 </script>
 <style scoped>

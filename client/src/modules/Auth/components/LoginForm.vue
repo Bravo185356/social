@@ -22,7 +22,6 @@ const router = useRouter();
 
 async function loginUser() {
   const user = await AuthApi.loginByForm({ login: login.value, password: password.value });
-
   if (user.rows) {
     store.setUser(user.rows[0]);
     localStorage.setItem("token", user.rows[0].id);
