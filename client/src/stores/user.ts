@@ -1,4 +1,4 @@
-import { ref, computed, type ComputedRef } from "vue";
+import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 
 // CURRENT USER (AUTH)

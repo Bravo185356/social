@@ -1,6 +1,7 @@
 <template>
   <app-header :notifications="notifications" />
   <main class="main">
+    <page-loader v-if="!isLoadingStore.isLoading" />
     <div>
       <left-sidebar v-if="userStore.isLogined" />
       <div :class="{ content: userStore.isLogined, 'content-not-auth': !userStore.isLogined }">
@@ -14,24 +15,26 @@ import { useRouter } from "vue-router";
 import LeftSidebar from "@/components/Sidebar/LeftSidebar.vue";
 import { onMounted, onUpdated, ref } from "vue";
 import { useUserStore } from "@/stores/user.ts";
-import { useFriendStore } from "@/stores/friends.ts";
 import AuthApi from "@/Service/API/auth";
 import AppHeader from "@/components/AppHeader/AppHeader.vue";
 import RequestsApi from "@/Service/API/requests.ts";
+import PageLoader from "@/UI/PageLoader.vue";
+import { useIsLoading } from "@/stores/isLoading";
 
 const userStore = useUserStore();
-const friendStore = useFriendStore();
+const isLoadingStore = useIsLoading();
 
 const router = useRouter();
-
 const notifications = ref([]);
 
 onMounted(async () => {
   const token = localStorage.getItem("token");
-
   if (token) {
     const notificationsList = await RequestsApi.getAlert(token);
     notifications.value = notificationsList;
+
+    const user = await AuthApi.loginOnPageLoad(token);
+    await userStore.setUser(user.rows[0]);
   } else {
     router.push("/auth/login");
   }

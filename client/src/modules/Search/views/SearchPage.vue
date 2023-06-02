@@ -10,19 +10,21 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from "vue";
 import { useUserStore } from "@/stores/user.ts";
-import { useFriendStore } from "@/stores/friends.ts";
 import FilterSidebar from "@/modules/Search/components/FilterSidebar.vue";
 import SearchApi from "../API/SearchApi.ts";
 import FriendApi from "@/Service/API/friends.ts";
-import UserItem from '@/modules/Search/components/UserItem.vue'
+import UserItem from "@/modules/Search/components/UserItem.vue";
+import { useIsLoading } from "@/stores/isLoading.js";
 
 const userStore = useUserStore();
+const isLoadingStore = useIsLoading();
 
 const users = ref([]);
 
 onMounted(async () => {
   const userList = await SearchApi.getAllUsers();
   users.value = userList.rows;
+  isLoadingStore.setIsLoading(true);
 });
 </script>
 <style scoped>
@@ -39,6 +41,4 @@ onMounted(async () => {
   display: grid;
   gap: 10px;
 }
-
-
 </style>
