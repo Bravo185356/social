@@ -16,28 +16,11 @@
 import { computed, defineProps, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/user.ts";
-import { useFriendStore } from "@/stores/friends.ts";
 import { getImageUrl } from "@/helpers/getImageUrl.ts";
 
 const props = defineProps({
   user: { type: Object },
 });
-// const userStore = useUserStore();
-
-// async function addFriend(user) {
-//   const response = await fetch("http://localhost:8080/api/add-friend", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({
-//       user,
-//       id: userStore.getUser.id,
-//     }),
-//   });
-//   const data = await response.json()
-// }
-
 </script>
 <style>
 .user-body {

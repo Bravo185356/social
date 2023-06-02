@@ -1,5 +1,5 @@
 <template>
-  <div v-if="userStore.isLogined" class="main-page">
+  <div class="main-page">
     <v-dialog v-model="changeAvatarModal">
       <v-card width="500px">
         <v-card-title>Выберите изображение</v-card-title>
@@ -24,7 +24,7 @@
         <div class="city">Город {{ user.city }}</div>
       </div>
       <div>
-        <v-btn @click="sendFriendRequest">Добавить в друзья</v-btn>
+        <v-btn v-if="userStore.getUser.id !== user.id && !isMyFriend" @click="sendFriendRequest">Добавить в друзья</v-btn>
       </div>
     </div>
     <div class="profile-body">
@@ -49,16 +49,15 @@
 import { ref, computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useUserStore } from "@/stores/user.ts";
-import { useFriendStore } from "@/stores/friends.ts";
 import PostList from "../components/PostList.vue";
-import AuthApi from "@/Service/API/auth";
 import { getImageUrl } from "@/helpers/getImageUrl.ts";
 import AvatarApi from "@/modules/UserPage/API/avatar";
 import UserApi from "@/Service/API/users.ts";
 import FriendApi from "@/Service/API/friends.ts";
+import { useIsLoading } from "@/stores/isLoading";
 
 const userStore = useUserStore();
-const friendStore = useFriendStore();
+const isLoadingStore = useIsLoading();
 const route = useRoute();
 
 const user = ref({});
@@ -86,7 +85,9 @@ async function getUserInfo(id) {
 async function sendFriendRequest() {
   await FriendApi.addFriend(userStore.getUser.id, route.params.id);
 }
-
+const isMyFriend = computed(() => {
+  return friends.value.find((friend) => friend.id === userStore.getUser.id);
+});
 watch(
   () => route.params.id,
   async (newId) => {
@@ -97,7 +98,8 @@ watch(
   { immediate: true }
 );
 onMounted(async () => {
-  getUserInfo(route.params.id);
+  await getUserInfo(route.params.id);
+  isLoadingStore.setIsLoading(true);
 });
 </script>
 
