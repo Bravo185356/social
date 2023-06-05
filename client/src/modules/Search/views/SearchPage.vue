@@ -24,7 +24,6 @@ const users = ref([]);
 onMounted(async () => {
   const userList = await SearchApi.getAllUsers();
   users.value = userList.rows;
-  isLoadingStore.setIsLoading(true);
 });
 </script>
 <style scoped>

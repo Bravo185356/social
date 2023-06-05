@@ -46,8 +46,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from "vue";
-import { useRoute } from "vue-router";
+import { ref, computed, onMounted, watch, defineProps } from "vue";
+import { useRoute, onBeforeRouteUpdate } from "vue-router";
 import { useUserStore } from "@/stores/user.ts";
 import PostList from "../components/PostList.vue";
 import { getImageUrl } from "@/helpers/getImageUrl.ts";
@@ -55,13 +55,19 @@ import AvatarApi from "@/modules/UserPage/API/avatar";
 import UserApi from "@/Service/API/users.ts";
 import FriendApi from "@/Service/API/friends.ts";
 import { useIsLoading } from "@/stores/isLoading";
+import { fetchUserInfo } from "../router.ts";
+
+const props = defineProps({
+  user: Object,
+  friends: Array,
+});
 
 const userStore = useUserStore();
 const isLoadingStore = useIsLoading();
 const route = useRoute();
 
-const user = ref({});
-const friends = ref([]);
+const user = ref(props.user);
+const friends = ref(props.friends);
 const file = ref<File | Blob | null>(null);
 const changeAvatarModal = ref(false);
 
@@ -76,30 +82,16 @@ async function updateAvatar() {
 
   user.value.img = await AvatarApi.updateAvatar(formData);
 }
-async function getUserInfo(id) {
-  const info = await UserApi.getUserInfo(id);
-  user.value = info;
-  const friendList = await FriendApi.getMyFriends(id);
-  friends.value = friendList;
-}
+onBeforeRouteUpdate(async (to, from) => {
+  const [userInfo, friendList] = await fetchUserInfo(to.params.id)
+  user.value = userInfo
+  friends.value = friendList
+});
 async function sendFriendRequest() {
   await FriendApi.addFriend(userStore.getUser.id, route.params.id);
 }
 const isMyFriend = computed(() => {
   return friends.value.find((friend) => friend.id === userStore.getUser.id);
-});
-watch(
-  () => route.params.id,
-  async (newId) => {
-    if (userStore.isLogined && newId) {
-      getUserInfo(newId);
-    }
-  },
-  { immediate: true }
-);
-onMounted(async () => {
-  await getUserInfo(route.params.id);
-  isLoadingStore.setIsLoading(true);
 });
 </script>
 
