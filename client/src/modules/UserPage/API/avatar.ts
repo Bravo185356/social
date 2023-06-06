@@ -1,5 +1,5 @@
 export default class AvatarApi {
-  async updateAvatar(formData: FormData) {
+  static async updateAvatar(formData: FormData) {
     const response = await fetch("http://localhost:8080/api/change-avatar", {
       method: "POST",
       body: formData,

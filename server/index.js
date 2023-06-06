@@ -8,7 +8,6 @@ const postRouter = require("./routes/post.routes");
 const requestsRouter = require("./routes/requests.routes");
 
 const cors = require("cors");
-const fileUpload = require("express-fileupload");
 const bodyParser = require("body-parser");
 
 const PORT = process.env.PORT || 8080;
@@ -19,7 +18,6 @@ app.use(cors());
 
 app.use("/static", express.static("static"));
 
-app.use(fileUpload({}));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(bodyParser.json());

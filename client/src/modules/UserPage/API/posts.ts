@@ -6,7 +6,7 @@ interface BodyProps {
 export default class PostsApi {
   static async getUserPosts(id: number) {
     const response = await fetch(`http://localhost:8080/api/get-posts?id=${id}`)
-    const data = response.json()
+    const data = await response.json()
     return data
   }
   static async createPost(body: BodyProps) {
