@@ -3,7 +3,7 @@ const db = require("../db");
 class UserController {
   async getAllUsers(req, res) {
     const userList = await db.query(`SELECT id, name, surname, city, img FROM users`);
-    res.json(userList);
+    res.json(userList.rows);
   }
   async getUserInfo(req, res) {
     const id = req.query.id;
