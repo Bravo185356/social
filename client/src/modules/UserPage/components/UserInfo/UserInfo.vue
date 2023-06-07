@@ -22,8 +22,10 @@
       <div class="status">status</div>
       <div class="city">Город {{ props.user.city }}</div>
     </div>
-    <div>
-      <v-btn v-if="userStore.getUser.id !== props.user.id && !isMyFriend" @click="sendFriendRequest">Добавить в друзья</v-btn>
+    <div v-if="user.id !== userStore.getUser.id">
+      <v-btn v-if="user.status === 0" >Отменить запрос</v-btn>
+      <v-btn v-else-if="user.status === 1">Удалить из друзей</v-btn>
+      <v-btn v-else @click="$emit('sendRequest')">Добавить в друзья</v-btn>
     </div>
   </div>
 </template>
@@ -33,11 +35,10 @@ import { useUserStore } from "@/stores/user.ts";
 import { useRoute } from "vue-router";
 import { getImageUrl } from "@/helpers/getImageUrl.ts";
 
-const emits = defineEmits(["changeAvatar"]);
+const emits = defineEmits(["changeAvatar", "sendRequest"]);
 
 const props = defineProps({
   user: Object,
-  isMyFriend: Boolean,
 });
 
 const userStore = useUserStore();

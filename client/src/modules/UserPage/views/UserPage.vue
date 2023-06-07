@@ -1,6 +1,6 @@
 <template>
   <div class="main-page">
-    <user-info @change-avatar="changeAvatar" :isMyFriend="isMyFriend" :user="user" />
+    <user-info @send-request="sendFriendRequest" @change-avatar="changeAvatar" :user="user" />
     <div class="profile-body">
       <friend-list :friends="friends" />
       <post-list @delete-post="deletePost" @create-post="createPost" :posts="posts" />
@@ -67,9 +67,6 @@ onBeforeRouteUpdate(async (to, from) => {
 async function sendFriendRequest() {
   await FriendApi.addFriend(userStore.getUser.id, route.params.id);
 }
-const isMyFriend = computed(() => {
-  return friends.value.find((friend) => friend.id === userStore.getUser.id) ? true : false;
-});
 </script>
 <style scoped lang="scss">
 .main-page {
