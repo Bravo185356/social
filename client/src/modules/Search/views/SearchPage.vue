@@ -8,7 +8,6 @@
   <filter-sidebar />
 </template>
 <script setup lang="ts">
-import { defineProps } from "vue";
 import FilterSidebar from "@/modules/Search/components/FilterSidebar.vue";
 import UserItem from "@/modules/Search/components/UserItem.vue";
 
@@ -17,17 +16,17 @@ const props = defineProps({
 })
 </script>
 <style scoped>
-.users-body {
-  flex: 1 1 auto;
-  padding-right: 200px;
-}
 .title {
-  font-size: 24px;
+  font-size: 28px;
   text-align: center;
   margin-bottom: 20px;
 }
 .user-list {
   display: grid;
   gap: 10px;
+}
+.users-body {
+  padding-top: 40px;
+  flex: 1 1 auto;
 }
 </style>

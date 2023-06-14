@@ -2,11 +2,9 @@
   <app-header :notifications="notifications" />
   <main class="main">
     <page-loader v-if="isLoadingStore.isLoading" />
-    <div>
+    <div :class="{ content: userStore.isLogined, 'content-not-auth': !userStore.isLogined }">
       <left-sidebar v-if="userStore.isLogined" />
-      <div :class="{ content: userStore.isLogined, 'content-not-auth': !userStore.isLogined }">
-        <router-view />
-      </div>
+      <router-view />
     </div>
   </main>
 </template>
@@ -44,10 +42,9 @@ onMounted(async () => {
 }
 .main {
   position: relative;
-  display: grid;
-  grid-template: 1fr / 1fr;
+  display: flex;
   padding-top: 60px;
-  height: 100%;
+  min-height: 100%;
 }
 .loader {
   position: absolute;
@@ -59,10 +56,32 @@ onMounted(async () => {
   background-color: white;
 }
 .content {
-  padding: 40px 40px 40px 240px;
+  display: flex;
+  column-gap: 50px;
+  flex: 1 1 auto;
+  min-height: 100%;
 }
 .content-not-auth {
   text-align: center;
   padding: 40px;
+}
+.sidebar-wrap {
+  position: relative;
+  flex: 0 0 200px;
+  font-size: 18px;
+  letter-spacing: 1.5px;
+  background-color: white;
+  padding: 10px;
+  z-index: 100;
+  box-shadow: 0px 0px 7px rgb(196, 196, 196);
+}
+.sidebar-content {
+  position: fixed;
+}
+a {
+  transition: color 0.2s ease-in;
+  &:hover {
+    color: #1976d2;
+  }
 }
 </style>
