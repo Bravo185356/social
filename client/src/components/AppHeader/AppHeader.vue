@@ -4,7 +4,7 @@
     <div class="notifications">
       <v-menu>
         <template v-slot:activator="{ props }">
-          <v-btn color="variant" v-bind="props">Уведомления</v-btn>
+          <v-icon size="large" v-bind="props" color="blue-darken-2" icon="mdi-bell"></v-icon>
         </template>
         <v-list v-if="notifications.length">
           <v-list-item v-for="notification in notifications" :key="notification.id">
@@ -24,13 +24,14 @@
       </v-menu>
     </div>
     <router-link :to="{ path: store.isLogined ? '/profile' : '/auth/login' }"
-      ><v-btn :variant="buttonType">{{ buttonText }}</v-btn></router-link
+    ><v-btn :variant="buttonType">{{ buttonText }}</v-btn></router-link
     >
+    
   </header>
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps } from "vue";
+import { computed } from "vue";
 import { useUserStore } from "@/stores/user.ts";
 import RequestApi from "@/Service/API/requests.ts";
 import { getImageUrl } from "@/helpers/getImageUrl.ts";
@@ -61,8 +62,8 @@ async function rejectRequest(id) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: rgb(179, 223, 252);
-  box-shadow: 0px 0px 10px gray;
+  background-color: white;
+  border-bottom: 1px solid rgb(207, 207, 207);
   padding: 10px;
   max-height: 60px;
   z-index: 101;
@@ -86,5 +87,8 @@ async function rejectRequest(id) {
   display: flex;
   gap: 5px;
   padding: 5px;
+}
+.v-list {
+  margin-top: 5px;
 }
 </style>

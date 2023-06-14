@@ -38,7 +38,10 @@ router.addRoute(AuthRoutes);
 router.addRoute(SearchRoutes);
 router.addRoute(UserRoutes);
 
-router.beforeEach(async () => {
+router.beforeEach(async (to, from) => {
+  if(to.path === from.path && from.path !== '/') {
+    return false
+  }
   const userStore = useUserStore();
   const isLoadingStore = useIsLoading();
 

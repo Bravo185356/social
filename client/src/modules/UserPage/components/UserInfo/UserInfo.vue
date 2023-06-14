@@ -1,6 +1,6 @@
 <template>
-  <v-dialog v-model="changeAvatarModal">
-    <v-card width="500px">
+  <v-dialog max-width="500px" v-model="changeAvatarModal">
+    <v-card>
       <v-card-title>Выберите изображение</v-card-title>
       <div class="change-avatar-modal">
         <form class="avatar-form" @submit.prevent="$emit('changeAvatar', file)">
@@ -30,7 +30,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps, ref, defineEmits } from "vue";
+import { ref, defineEmits } from "vue";
 import { useUserStore } from "@/stores/user.ts";
 import { useRoute } from "vue-router";
 import { getImageUrl } from "@/helpers/getImageUrl.ts";

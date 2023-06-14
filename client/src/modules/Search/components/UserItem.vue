@@ -5,15 +5,15 @@
         <img :src="getImageUrl(user.img)" alt="Аватар" />
       </div>
       <div class="user-info">
-        <div>id: {{ user.id }}</div>
         <router-link :to="{ path: `/${user.id}` }">{{ user.name }} {{ user.surname }}</router-link>
-        <div>Город: {{ user.city }}</div>
+        <div>id: {{ user.id }}</div>
+        <div>{{ user.city }}</div>
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { computed, defineProps, watch } from "vue";
+import { computed, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/user.ts";
 import { getImageUrl } from "@/helpers/getImageUrl.ts";
@@ -30,19 +30,21 @@ const props = defineProps({
   margin-bottom: 10px;
 }
 .user-item {
+  font-size: 20px;
   align-items: center;
   gap: 10px;
-  background-color: rgb(207, 207, 207);
+  /* background-color: rgba(80, 158, 207, 0.623); */
+  border-bottom: 1px solid rgb(190, 190, 190);
   padding: 20px;
-  border-radius: 10px;
+  /* border-radius: 10px; */
 }
 .user-image {
   position: relative;
-  background-color: gray;
-  width: 60px;
-  height: 60px;
+  width: 100px;
+  height: 100px;
 }
 .user-image img {
+  border-radius: 50%;
   position: absolute;
   width: 100%;
   height: 100%;

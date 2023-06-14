@@ -8,7 +8,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed, onMounted, watch, defineProps } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useRoute, onBeforeRouteUpdate } from "vue-router";
 import { useUserStore } from "@/stores/user.ts";
 import PostList from "../components/PostList/PostList.vue";
@@ -70,7 +70,8 @@ async function sendFriendRequest() {
 </script>
 <style scoped lang="scss">
 .main-page {
-  padding: 10px;
+  padding-top: 40px;
+  flex: 0 1 1000px;
 }
 
 .profile-body {

@@ -13,7 +13,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps } from "vue";
 import { getImageUrl } from "@/helpers/getImageUrl.ts";
 
 const props = defineProps({
