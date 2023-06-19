@@ -1,12 +1,10 @@
 <template>
   <app-header :notifications="notifications" />
-  <main class="main">
     <page-loader v-if="isLoadingStore.isLoading" />
-    <div :class="{ content: userStore.isLogined, 'content-not-auth': !userStore.isLogined }">
+    <main :class="{ content: userStore.isLogined, 'content-not-auth': !userStore.isLogined }">
       <left-sidebar v-if="userStore.isLogined" />
       <router-view />
-    </div>
-  </main>
+    </main>
 </template>
 <script setup lang="ts">
 import { useRouter } from "vue-router";
@@ -57,8 +55,7 @@ onMounted(async () => {
 }
 .content {
   display: flex;
-  column-gap: 50px;
-  flex: 1 1 auto;
+  padding-top: 60px;
   min-height: 100%;
 }
 .content-not-auth {

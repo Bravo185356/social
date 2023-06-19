@@ -22,7 +22,7 @@ const props = defineProps({
   user: { type: Object },
 });
 </script>
-<style>
+<style scoped>
 .user-body {
   display: flex;
   gap: 10px;
@@ -33,10 +33,8 @@ const props = defineProps({
   font-size: 20px;
   align-items: center;
   gap: 10px;
-  /* background-color: rgba(80, 158, 207, 0.623); */
   border-bottom: 1px solid rgb(190, 190, 190);
   padding: 20px;
-  /* border-radius: 10px; */
 }
 .user-image {
   position: relative;
