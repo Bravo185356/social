@@ -1,9 +1,11 @@
 <template>
-  <div class="main-page">
-    <user-info @send-request="sendFriendRequest" @change-avatar="changeAvatar" :user="user" />
-    <div class="profile-body">
-      <friend-list :friends="friends" />
-      <post-list @delete-post="deletePost" @create-post="createPost" :posts="posts" />
+  <div class="user-wrapper">
+    <div class="user-body">
+      <user-info @send-request="sendFriendRequest" @change-avatar="changeAvatar" :user="user" />
+      <div class="profile-body">
+        <friend-list :friends="friends" />
+        <post-list @delete-post="deletePost" @create-post="createPost" :posts="posts" />
+      </div>
     </div>
   </div>
 </template>
@@ -69,11 +71,17 @@ async function sendFriendRequest() {
 }
 </script>
 <style scoped lang="scss">
-.main-page {
-  padding-top: 40px;
+.user-wrapper {
+  display: flex;
+  flex: 1 1 auto;
+  justify-content: center;
+  padding: 40px;
+}
+.user-body {
+  display: flex;
+  flex-direction: column;
   flex: 0 1 1000px;
 }
-
 .profile-body {
   display: grid;
   column-gap: 20px;

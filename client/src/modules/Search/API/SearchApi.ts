@@ -1,7 +1,10 @@
+import axios from 'axios'
+
 export default class SearchApi {
-  static async getAllUsers() {
-    const response = await fetch("http://localhost:8080/api/search");
-    const userList = await response.json();
-    return userList;
+  static async getAllUsers(query = null) {
+    const userList = await axios.get(`http://localhost:8080/api/search`, {
+      params: query
+    })
+    return userList.data;
   }
 }
