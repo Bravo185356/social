@@ -1,5 +1,5 @@
 <template>
-  <app-header :notifications="notifications" />
+  <app-header />
     <page-loader v-if="isLoadingStore.isLoading" />
     <main :class="{ content: userStore.isLogined, 'content-not-auth': !userStore.isLogined }">
       <left-sidebar v-if="userStore.isLogined" />
@@ -8,11 +8,11 @@
 </template>
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import LeftSidebar from "@/components/Sidebar/LeftSidebar.vue";
-import { onMounted, ref } from "vue";
+import LeftSidebar from "@/components/LeftSidebar.vue";
+import { onMounted } from "vue";
 import { useUserStore } from "@/stores/user.ts";
 import AuthApi from "@/Service/API/auth";
-import AppHeader from "@/components/AppHeader/AppHeader.vue";
+import AppHeader from "@/components/AppHeader.vue";
 import RequestsApi from "@/Service/API/requests.ts";
 import PageLoader from "@/UI/PageLoader.vue";
 import { useIsLoading } from "@/stores/isLoading";
@@ -21,14 +21,10 @@ const userStore = useUserStore();
 const isLoadingStore = useIsLoading();
 
 const router = useRouter();
-const notifications = ref([]);
 
 onMounted(async () => {
   const token = localStorage.getItem("token");
-  if (token) {
-    const notificationsList = await RequestsApi.getAlert(token);
-    notifications.value = notificationsList;
-  } else {
+  if(!token) {
     router.push("/auth/login");
   }
 });
@@ -60,7 +56,7 @@ onMounted(async () => {
 }
 .content-not-auth {
   text-align: center;
-  padding: 40px;
+  padding-top: 100px;
 }
 .sidebar-wrap {
   position: relative;

@@ -2,15 +2,20 @@ const db = require("../db");
 
 class UserController {
   async getAllUsers(req, res) {
-    console.log(req.query);
-    const { name } = req.query;
+    const userList = await db.query(`SELECT id, name, surname, city, img FROM users`);
+    res.json(userList.rows);
+  }
+  async getUsersWithFilter(req, res) {
+    const { name, surname = null } = req.query;
     let userList;
-    if (name) {
-      userList = await db.query(`SELECT id, name, surname, city, img FROM users where name=$1`, [name]);
+    if (name && surname) {
+      userList = await db.query(`SELECT id, name, surname, city, img FROM users where name=$1 AND surname=$2`, [name, surname]);
+    } else if(name) {
+      userList = await db.query(`SELECT id, name, surname, city, img FROM users where name=$1 OR surname=$1`, [name]);
     } else {
       userList = await db.query(`SELECT id, name, surname, city, img FROM users`);
     }
-    res.json(userList.rows);
+    res.json(userList.rows)
   }
   async getUserInfo(req, res) {
     const { id, myId } = req.query;

@@ -1,19 +1,27 @@
+import axios from "axios";
+
 export default class FriendApi {
   static async getMyFriends(id: number) {
-    const response = await fetch(`http://localhost:8080/api/get-friends?id=${id}`);
-    const friendList = await response.json();
-    return friendList.rows;
+    const response = await axios.get(`http://localhost:8080/api/get-friends`, {
+      params: {
+        id,
+      },
+    });
+    return response.data;
+  }
+  static async getFriendsWithFilter(id: number, query: any) {
+    const friendList = await axios.get("http://localhost:8080/api/get-filtered-friends", {
+      params: {
+        id,
+        ...query,
+      },
+    });
+    return friendList.data;
   }
   static async addFriend(myId: number, id: number) {
-    await fetch("http://localhost:8080/api/add-friend", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        myId: myId,
-        id: id,
-      }),
+    await axios.post("http://localhost:8080/api/add-friend", {
+      myId: myId,
+      id: id,
     });
   }
 }

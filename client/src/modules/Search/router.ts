@@ -11,7 +11,7 @@ const moduleRoute = {
             component: SearchPage,
             props: true,
             beforeEnter: async (to: any) => {
-                const userList = await SearchApi.getAllUsers(to.query);
+                const userList = await SearchApi.getAllUsers();
                 to.params.users = userList
             }
         }

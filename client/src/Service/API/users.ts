@@ -1,13 +1,17 @@
+import axios from "axios";
+
 export default class UserApi {
   static async getAllUsers() {
-    const response = await fetch("http://localhost:8080/api/search");
-    const userList = await response.json();
-    return userList
+    const response = await axios.get("http://localhost:8080/api/search");
+    return response.data
   }
   static async getUserInfo(id: number, myId: number) {
-    const response = await fetch(`http://localhost:8080/api/get-user?id=${id}&myId=${myId}`);
-    const info = await response.json();
-    console.log(info)
-    return info
+    const response = await axios.get(`http://localhost:8080/api/get-user`, {
+      params: {
+        id,
+        myId
+      }
+    });
+    return response.data
   }
 }

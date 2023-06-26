@@ -10,13 +10,13 @@ class RequestController {
           where b.id = $1 AND a.id = b.whose AND b.status = 0`,
       [id]
     );
-    res.json(user);
+    res.json(user.rows);
   }
   async acceptRequest(req, res) {
     const { myId, id } = req.body;
 
     await db.query(`INSERT INTO friends (whose, id, status) values ($1, $2, 1)`, [myId, id]);
-    await db.query(`UPDATE friends SET status = 1 where whose = $1`, [id]);
+    await db.query(`UPDATE friends SET status = 1 where whose = $1 AND id = $2`, [id, myId]);
   }
   async rejectRequest(req, res) {
     const { id } = req.body;

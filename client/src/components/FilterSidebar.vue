@@ -3,8 +3,8 @@
     <div class="sidebar-content">
       <div>фильтр</div>
       <v-form>
-        <v-text-field variant="underlined" v-model="name" :counter="10" label="Имя" required></v-text-field>
-        <v-btn @click.prevent="acceptFilter" type="submit" block>Поиск</v-btn>
+        <v-text-field variant="underlined" v-model="name" label="Имя" />
+        <v-btn @click.prevent="$emit('acceptFilter', name)" type="submit" block>Поиск</v-btn>
         <div v-if="resetButtonVisible" @click="resetFilter">Сбросить фильтр</div>
       </v-form>
     </div>
@@ -19,14 +19,10 @@ const route = useRoute()
 
 const name = ref("");
 
-function acceptFilter() {
-  if (name.value === "") {
-    return;
-  }
-  router.push({ path: "/search", query: { name: name.value } });
-}
+
 function resetFilter() {
-    router.push('/search')
+  name.value = ''
+  router.push('/search')
 }
 const resetButtonVisible = computed(() => {
     return Object.keys(route.query).length

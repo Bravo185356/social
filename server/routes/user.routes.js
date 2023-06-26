@@ -3,6 +3,7 @@ const router = new Router();
 const UserController = require("../controller/user.controller");
 
 router.get("/search", UserController.getAllUsers);
+router.get('/get-filtered-users', UserController.getUsersWithFilter)
 router.get("/get-user", UserController.getUserInfo);
 
 module.exports = router;
