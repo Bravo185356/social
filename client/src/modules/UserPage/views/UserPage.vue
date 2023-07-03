@@ -1,7 +1,7 @@
 <template>
   <div class="user-wrapper">
     <div class="user-body">
-      <user-info @send-request="sendFriendRequest" @change-avatar="changeAvatar" :user="user" />
+      <user-info @send-request="sendFriendRequest" @upload-avatar="uploadAvatar" :user="user" />
       <div class="profile-body">
         <friend-list :friends="friends" />
         <post-list @delete-post="deletePost" @create-post="createPost" :posts="posts" />
@@ -10,10 +10,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from "vue";
+import { ref } from "vue";
 import { useRoute, onBeforeRouteUpdate } from "vue-router";
 import { useUserStore } from "@/stores/user.ts";
-import PostList from "../components/PostList/PostList.vue";
+import PostList from "../components/PostList.vue";
 import PostsApi from "../API/posts.ts";
 import { getImageUrl } from "@/helpers/getImageUrl.ts";
 import AvatarApi from "@/modules/UserPage/API/avatar";
@@ -21,8 +21,8 @@ import UserApi from "@/Service/API/users.ts";
 import FriendApi from "@/Service/API/friends.ts";
 import { useIsLoading } from "@/stores/isLoading";
 import { fetchUserInfo } from "../router.ts";
-import FriendList from "../components/FriendList/FriendList.vue";
-import UserInfo from "../components/UserInfo/UserInfo.vue";
+import FriendList from "../components/FriendList.vue";
+import UserInfo from "../components/UserInfo.vue";
 
 const props = defineProps({
   user: Object,
@@ -38,8 +38,6 @@ const user = ref(props.user);
 const friends = ref(props.friends);
 const posts = ref(props.posts);
 
-const changeAvatarModal = ref(false);
-
 async function createPost(text) {
   const body = {
     content: text,
@@ -52,9 +50,9 @@ function deletePost(id) {
   PostsApi.deletePost(id);
   posts.value = posts.value.filter((post) => post.id !== id);
 }
-async function changeAvatar(file) {
+async function uploadAvatar(file) {
   const formData = new FormData();
-
+  console.log(file)
   formData.append("avatar", file);
   formData.append("id", route.params.id);
 
