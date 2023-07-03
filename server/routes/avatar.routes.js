@@ -8,11 +8,14 @@ const storage = multer.diskStorage({
     cb(null, "static/");
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    cb(null, uniqueSuffix + '-' + file.originalname );
   },
 });
 const upload = multer({ storage: storage });
 
-router.post("/change-avatar", upload.single("avatar"), AvatarController.changeAvatar);
+router.post("/change-avatar", upload.single("avatar"), AvatarController.uploadAvatar);
+router.get('/get-avatars', AvatarController.getRecentAvatars)
+router.post('/select-avatar', AvatarController.selectFromRecent)
 
 module.exports = router;
