@@ -1,7 +1,7 @@
 <template>
   <div class="user-wrapper">
     <div class="user-body">
-      <user-info @send-request="sendFriendRequest" @upload-avatar="uploadAvatar" :user="user" />
+      <user-info @send-request="sendFriendRequest" @update-avatar="updateAvatar" :user="user" />
       <div class="profile-body">
         <friend-list :friends="friends" />
         <post-list @delete-post="deletePost" @create-post="createPost" :posts="posts" />
@@ -16,7 +16,6 @@ import { useUserStore } from "@/stores/user.ts";
 import PostList from "../components/PostList.vue";
 import PostsApi from "../API/posts.ts";
 import { getImageUrl } from "@/helpers/getImageUrl.ts";
-import AvatarApi from "@/modules/UserPage/API/avatar";
 import UserApi from "@/Service/API/users.ts";
 import FriendApi from "@/Service/API/friends.ts";
 import { useIsLoading } from "@/stores/isLoading";
@@ -50,13 +49,12 @@ function deletePost(id) {
   PostsApi.deletePost(id);
   posts.value = posts.value.filter((post) => post.id !== id);
 }
-async function uploadAvatar(file) {
-  const formData = new FormData();
-  console.log(file)
-  formData.append("avatar", file);
-  formData.append("id", route.params.id);
-
-  user.value.img = await AvatarApi.updateAvatar(formData);
+function updateAvatar(img) {
+  user.value.img = img
+  userStore.changeField('img', img)
+}
+async function sendFriendRequest() {
+  await FriendApi.addFriend(userStore.getUser.id, route.params.id);
 }
 onBeforeRouteUpdate(async (to, from) => {
   const [userInfo, friendList, postsList] = await fetchUserInfo(to.params.id);
@@ -64,9 +62,6 @@ onBeforeRouteUpdate(async (to, from) => {
   friends.value = friendList;
   posts.value = postsList;
 });
-async function sendFriendRequest() {
-  await FriendApi.addFriend(userStore.getUser.id, route.params.id);
-}
 </script>
 <style scoped lang="scss">
 .user-wrapper {

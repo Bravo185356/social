@@ -8,13 +8,11 @@ class PostController {
   }
   async deletePost(req, res) {
     const { id } = req.body;
-    console.log(id);
     await db.query(`DELETE FROM posts WHERE id = $1`, [id]);
   }
   async getUserPosts(req, res) {
     const id = req.query.id;
     const posts = await db.query(`SELECT * FROM posts where user_id = $1`, [id]);
-    console.log(posts);
     res.json(posts.rows);
   }
 }

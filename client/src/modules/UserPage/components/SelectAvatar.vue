@@ -1,40 +1,41 @@
 <template>
-  <v-dialog max-width="500px" v-model="avatarVisible">
+  <v-dialog max-width="500px" v-model="avatarModalVisible">
     <v-card>
       <v-card-title>Выберите изображение</v-card-title>
       <div class="change-avatar-modal">
-        <form class="avatar-form" @submit.prevent="$emit('uploadAvatar', file)">
+        <div class="avatar-form">
           <input name="avatar" @change="setFile" type="file" />
-          <v-btn type="submit">Изменить</v-btn>
-        </form>
-        <form>
-          <div class="select">
-            <div class="select-row">
-              <div v-for="img in recentImages">
-                <label class="select-item" @click="selectAvatar(img.img)" :for="img.img">
-                  <img class="image_small" :src="getImageUrl(img.img)" alt="" />
-                </label>
-                <input type="radio" class="opt" :id="img.img" />
-              </div>
+        </div>
+        <div class="select">
+          <div class="select-row">
+            <div class="select-item" v-for="img in recentImages">
+              <label class="select-image" @click="selectAvatarFromRecent(img.img)" :for="img.img">
+                <img class="image_small" :src="getImageUrl(img.img)" alt="" />
+              </label>
+              <input type="radio" class="opt" :id="img.img" />
             </div>
           </div>
-        </form>
+        </div>
+        <v-btn @click="uploadAvatar">Изменить</v-btn>
       </div>
     </v-card>
   </v-dialog>
 </template>
 <script setup lang="ts">
 import { computed, defineEmits, ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
 import { getImageUrl } from "@/helpers/getImageUrl.ts";
 import { useUserStore } from "@/stores/user.ts";
 import AvatarApi from "@/modules/UserPage/API/avatar.ts";
 
-const emit = defineEmits(["changeAvatarVisible", 'uploadAvatar']);
+const emit = defineEmits(["changeAvatarVisible", "updateAvatar"]);
 
 const props = defineProps({
   selectAvatarVisible: Boolean,
 });
+
 const userStore = useUserStore();
+const route = useRoute()
 
 const file = ref(null);
 const recentImages = ref([]);
@@ -42,11 +43,24 @@ const recentImages = ref([]);
 function setFile(e) {
   file.value = e.target.files[0];
 }
-async function selectAvatar(img) {
+async function selectAvatarFromRecent(img) {
   const image = await AvatarApi.selectFromRecentAvatars(userStore.getUser.id, img);
 }
+async function uploadAvatar() {
+  if(file.value) {
+    const formData = new FormData();
+  
+    formData.append("avatar", file.value);
+    formData.append("id", route.params.id);
+  
+    const response = await AvatarApi.updateAvatar(formData);
+    recentImages.value = response.recent
 
-const avatarVisible = computed({
+    emit("updateAvatar", response.img);
+    emit("changeAvatarVisible");
+  }
+}
+const avatarModalVisible = computed({
   get() {
     return props.selectAvatarVisible;
   },
@@ -55,11 +69,14 @@ const avatarVisible = computed({
   },
 });
 onMounted(async () => {
-  const images = await AvatarApi.getRecentAvatars(userStore.getUser.id, userStore.getUser.img);
+  const images = await AvatarApi.getRecentAvatars(userStore.getUser.id);
   recentImages.value = images;
 });
 </script>
-<style>
+<style scoped>
+.v-btn {
+  width: 100%;
+}
 .change-avatar-modal {
   padding: 20px;
 }
@@ -69,13 +86,21 @@ onMounted(async () => {
 }
 .select-row {
   display: flex;
+  column-gap: 10px;
+  margin-bottom: 10px;
 }
 .select-item {
+  display: grid;
+  justify-content: center;
+  row-gap: 10px;
+}
+.select-image {
   display: block;
   position: relative;
   width: 150px;
   height: 150px;
 }
+
 .image_small {
   position: absolute;
   top: 0;
