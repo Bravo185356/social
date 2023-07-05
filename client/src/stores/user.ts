@@ -3,12 +3,15 @@ import { defineStore } from "pinia";
 
 // CURRENT USER (AUTH)
 export const useUserStore = defineStore("user", () => {
-  const user = ref({});
+  const user = ref({}) as any;
   const isLogined = ref(false);
 
-  async function setUser(userInfo: any) {
+  function setUser(userInfo: any) {
     user.value = userInfo;
     isLogined.value = true
+  }
+  function changeField(field: string, value: string) {
+    user.value[field] = value
   }
   function $reset() {
     user.value = {}
@@ -17,5 +20,5 @@ export const useUserStore = defineStore("user", () => {
   const getIsLogined = computed(() => isLogined.value);
   const getUser:any = computed(() => user.value);
 
-  return { user, setUser, getUser, isLogined, getIsLogined, $reset };
+  return { user, setUser, getUser, isLogined, getIsLogined, $reset, changeField };
 });

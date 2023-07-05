@@ -2,7 +2,7 @@
   <select-avatar
     @change-avatar-visible="selectAvatarVisible = !selectAvatarVisible"
     :selectAvatarVisible="selectAvatarVisible"
-    @upload-avatar="(file) => $emit('uploadAvatar', file)"
+    @update-avatar="(img) => $emit('updateAvatar', img)"
   />
   <div class="profile-header">
     <div>
@@ -31,7 +31,7 @@ import { getImageUrl } from "@/helpers/getImageUrl.ts";
 import AvatarApi from "@/modules/UserPage/API/avatar.ts";
 import SelectAvatar from "./SelectAvatar.vue";
 
-const emits = defineEmits(["sendRequest", "uploadAvatar"]);
+const emits = defineEmits(["sendRequest", "updateAvatar"]);
 
 const props = defineProps({
   user: Object,

@@ -9,15 +9,15 @@ class AvatarController {
       `INSERT INTO recent_avatars (img, user_id, upload_date) values ((SELECT  img FROM users WHERE id = $1), $1, $2)`,
       [id, date]
     );
-    const user = await db.query(`UPDATE users SET img = $1 where id = $2 RETURNING *`, [file, id]);
-    res.json(user.rows[0].img);
+    const newImage = await db.query(`UPDATE users SET img = $1 where id = $2 RETURNING img`, [file, id]);
+    const newRecentList = await db.query(`SELECT img FROM recent_avatars WHERE user_id = $1 ORDER BY upload_date DESC LIMIT 3`, [
+      id,
+    ]);
+    res.json({ img: newImage.rows[0].img, recent: newRecentList.rows });
   }
   async getRecentAvatars(req, res) {
-    const { id, currentImg } = req.query;
-    const images = await db.query(
-      `SELECT img FROM recent_avatars WHERE user_id = $1 AND img != $2 ORDER BY upload_date DESC LIMIT 3`,
-      [id, currentImg]
-    );
+    const { id } = req.query;
+    const images = await db.query(`SELECT img FROM recent_avatars WHERE user_id = $1 ORDER BY upload_date DESC LIMIT 3`, [id]);
     res.json(images.rows);
   }
   async selectFromRecent(req, res) {

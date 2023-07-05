@@ -5,11 +5,10 @@ export default class AvatarApi {
     const response = await axios.post("http://localhost:8080/api/change-avatar", formData);
     return response.data;
   }
-  static async getRecentAvatars(id: number, currentImg: string) {
+  static async getRecentAvatars(id: number) {
     const response = await axios.get("http://localhost:8080/api/get-avatars", {
       params: {
         id,
-        currentImg,
       },
     });
     return response.data;

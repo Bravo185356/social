@@ -1,7 +1,6 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 
-// CURRENT USER (AUTH)
 export const useIsLoading = defineStore("isPageLoaded", () => {
   const isLoading = ref(true);
  
