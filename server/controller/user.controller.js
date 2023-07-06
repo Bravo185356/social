@@ -20,11 +20,17 @@ class UserController {
   async getUserInfo(req, res) {
     const { id, myId } = req.query;
     const userInfo = await db.query(
-      `SELECT *, (SELECT status FROM friends where whose = $1 AND id = $2 AND whose IS NOT NULL)
+      `SELECT name, surname, last_visit, id, city, img, 
+      (SELECT status FROM friends where whose = $1 AND id = $2 AND whose IS NOT NULL)
       FROM users where id = $2`,
       [myId, id]
     );
     res.json(userInfo.rows[0]);
+  }
+  async setLastVisitTime(req) {
+    const { id } = req.body
+    const date = new Date().toISOString()
+    await db.query(`UPDATE users SET last_visit = $1 WHERE id = $2`, [date, id]);
   }
 }
 

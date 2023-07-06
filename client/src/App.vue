@@ -16,6 +16,7 @@ import AppHeader from "@/components/AppHeader.vue";
 import RequestsApi from "@/Service/API/requests.ts";
 import PageLoader from "@/UI/PageLoader.vue";
 import { useIsLoading } from "@/stores/isLoading";
+import UserApi from '@/Service/API/users.ts'
 
 const userStore = useUserStore();
 const isLoadingStore = useIsLoading();
@@ -24,6 +25,11 @@ const router = useRouter();
 
 onMounted(async () => {
   const token = localStorage.getItem("token");
+
+  window.addEventListener("beforeunload", () => {
+    UserApi.setLastVisitTime(userStore.getUser.id)
+  });
+
   if(!token) {
     router.push("/auth/login");
   }

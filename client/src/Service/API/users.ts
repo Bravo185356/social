@@ -14,4 +14,9 @@ export default class UserApi {
     });
     return response.data
   }
+  static async setLastVisitTime(id: number) {
+    await axios.post('http://localhost:8080/api/set-last-visit', {
+      id: id
+    })
+  }
 }
