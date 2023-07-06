@@ -1,7 +1,7 @@
 <template>
   <div class="user-wrapper">
     <div class="user-body">
-      <user-info @send-request="sendFriendRequest" @update-avatar="updateAvatar" :user="user" />
+      <user-info @update-avatar="updateAvatar" :user="user" />
       <div class="profile-body">
         <friend-list :friends="friends" />
         <post-list @delete-post="deletePost" @create-post="createPost" :posts="posts" />
@@ -15,9 +15,6 @@ import { useRoute, onBeforeRouteUpdate } from "vue-router";
 import { useUserStore } from "@/stores/user.ts";
 import PostList from "../components/PostList.vue";
 import PostsApi from "../API/posts.ts";
-import { getImageUrl } from "@/helpers/getImageUrl.ts";
-import UserApi from "@/Service/API/users.ts";
-import FriendApi from "@/Service/API/friends.ts";
 import { useIsLoading } from "@/stores/isLoading";
 import { fetchUserInfo } from "../router.ts";
 import FriendList from "../components/FriendList.vue";
@@ -52,9 +49,6 @@ function deletePost(id) {
 function updateAvatar(img) {
   user.value.img = img
   userStore.changeField('img', img)
-}
-async function sendFriendRequest() {
-  await FriendApi.addFriend(userStore.getUser.id, route.params.id);
 }
 onBeforeRouteUpdate(async (to, from) => {
   const [userInfo, friendList, postsList] = await fetchUserInfo(to.params.id);

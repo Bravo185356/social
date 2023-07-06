@@ -3,11 +3,8 @@ const db = require("../db");
 class AuthController {
   async createUser(req, res) {
     const { name, surname, login, password, city } = req.body;
-    const newUser = await db.query(
-      `INSERT INTO users (name, surname, login, password, city, posts) values ($1, $2, $3, $4, $5) RETURNING *`,
-      [name, surname, login, password, city]
-    );
-    res.json(newUser);
+    await db.query(`INSERT INTO users (name, surname, login, password, city, posts) values ($1, $2, $3, $4, $5)`, 
+    [name, surname, login, password, city,]);
   }
   async login(req, res) {
     const { id = null, login, password } = req.body;
@@ -20,9 +17,9 @@ class AuthController {
     if (user.rows.length === 0) {
       res.json("Неверный логин или пароль");
     } else {
-      res.json(user);
+      await res.json(user.rows[0]);
     }
   }
 }
 
-module.exports = new AuthController()
+module.exports = new AuthController();
