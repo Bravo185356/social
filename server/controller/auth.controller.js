@@ -1,13 +1,18 @@
 const db = require("../db");
 const bcrypt = require("bcrypt");
 const defaultImg = require("../constants");
+const { validationResult } = require("express-validator");
 
 class AuthController {
   async createUser(req, res) {
     const { name, surname, login, password, city } = req.body;
+    const errors = validationResult(req).formatWith((error) => error.msg);
+    if (!errors.isEmpty()) {
+      return res.json({ errors: errors.array() });
+    }
     const isUserExisting = await db.query(`SELECT id FROM users where login = $1`, [login]);
-    if (isUserExisting) {
-      return res.json("Такой пользователь уже существует");
+    if (isUserExisting.rows[0]) {
+      return res.json({ error: "Такой пользователь уже существует" });
     }
     const hashPassword = await bcrypt.hash(password, 7);
     const date = new Date().toISOString();
@@ -26,7 +31,7 @@ class AuthController {
     if (user) {
       res.json(user.rows[0]);
     } else {
-      res.json("Не удалось авторизоваться");
+      res.json({ error: "Не удалось авторизоваться" });
     }
   }
   async loginByForm(req, res) {
@@ -40,7 +45,7 @@ class AuthController {
       );
       res.json(user.rows[0]);
     } else {
-      res.json("Неверный логин или пароль");
+      res.json({ error: "Неверный логин или пароль" });
     }
   }
 }

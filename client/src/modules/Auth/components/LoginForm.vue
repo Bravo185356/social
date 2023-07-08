@@ -1,6 +1,6 @@
 <template>
   <v-form>
-    <div class="error" v-if="errorMessage">{{ errorMessage.value }}</div>
+    <div class="error" v-if="errorMessage">{{ errorMessage }}</div>
     <v-text-field v-model="login" :counter="10" label="Логин" required></v-text-field>
     <v-text-field v-model="password" :counter="10" label="Пароль" required></v-text-field>
     <div>Нет аккаунта?<router-link to="/auth/registration"> Создайте его</router-link></div>
@@ -22,12 +22,12 @@ const router = useRouter();
 
 async function loginUser() {
   const user = await AuthApi.loginByForm({ login: login.value, password: password.value });
-  if (user.rows) {
-    store.setUser(user.rows[0]);
-    localStorage.setItem("token", user.rows[0].id);
+  if (!user.error) {
+    store.setUser(user);
+    localStorage.setItem("token", user.id);
     router.push("/");
   } else {
-    errorMessage.value = user;
+    errorMessage.value = user.error;
   }
 }
 </script>
