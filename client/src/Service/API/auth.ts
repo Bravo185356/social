@@ -14,7 +14,7 @@ interface CreateUserProps {
 
 export default class AuthApi {
   static async loginByForm({ login, password }: LoginByFormProps) {
-    const response = await axios.post("http://localhost:8080/api/login", {
+    const response = await axios.post("http://localhost:8080/api/login-by-form", {
       login,
       password,
     });
