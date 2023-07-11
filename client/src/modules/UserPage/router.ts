@@ -5,14 +5,6 @@ import FriendApi from "@/Service/API/friends";
 import PostsApi from "./API/posts";
 import { useUserStore } from "@/stores/user";
 
-export async function fetchUserInfo(id: number) {
-  const userStore = useUserStore();
-  const info = await UserApi.getUserInfo(id, userStore.getUser.id);
-  const friendList = await FriendApi.getMyFriends(id);
-  const postsList = await PostsApi.getUserPosts(id);
-  return [info, friendList, postsList];
-}
-
 const moduleRoute = {
   path: "/:id",
   component: Module,
@@ -22,7 +14,12 @@ const moduleRoute = {
       component: UserPage,
       props: true,
       beforeEnter: async (to: any) => {
-        const [userInfo, friendList, postsList] = await fetchUserInfo(to.params.id);
+        const userStore = useUserStore();
+
+        const userInfo = await UserApi.getUserInfo(to.params.id, userStore.getUser.id);
+        const friendList = await FriendApi.getFriends(to.params.id);
+        const postsList = await PostsApi.getUserPosts(to.params.id);
+
         to.params.user = userInfo;
         to.params.friends = friendList;
         to.params.posts = postsList;

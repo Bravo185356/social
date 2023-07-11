@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
-import ProfilePage from "@/views/ProfilePage.vue";
 import RootPage from "@/views/RootPage.vue";
 import AuthRoutes from "@/modules/Auth/index";
 import SearchRoutes from "@/modules/Search/index";
 import UserRoutes from "@/modules/UserPage/index";
+import ProfileRoutes from '@/modules/Profile/index'
 import { useUserStore } from "@/stores/user";
 import { useIsLoading } from "@/stores/isLoading";
 import AuthApi from "@/Service/API/auth";
@@ -30,18 +30,13 @@ const router = createRouter({
       },
     },
     {
-      path: "/profile",
-      name: "profile",
-      component: ProfilePage,
-    },
-    {
       path: '/friends',
       name: 'friends',
       component: FriendsPage,
       props: true,
       beforeEnter: async (to) => {
         const userStore = useUserStore();
-        const friendList = await FriendApi.getMyFriends(userStore.getUser.id)
+        const friendList = await FriendApi.getFriends(userStore.getUser.id)
         to.params.friends = friendList
       }
     }
@@ -50,6 +45,7 @@ const router = createRouter({
 router.addRoute(AuthRoutes);
 router.addRoute(SearchRoutes);
 router.addRoute(UserRoutes);
+router.addRoute(ProfileRoutes);
 
 router.beforeEach(async (to, from) => {
   const userStore = useUserStore();

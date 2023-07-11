@@ -1,7 +1,7 @@
 <template lang="">
   <div class="friends">
     <ul class="friend-list">
-      <li :key="friend.id" v-for="friend in props.friends" class="friend-item">
+      <li :key="friend.id" v-for="friend in friends" class="friend-item">
         <div class="friend-avatar">
           <img :src="getImageUrl(friend.img)" alt="аватар" />
         </div>
@@ -13,10 +13,19 @@
   </div>
 </template>
 <script setup lang="ts">
+import { ref } from "vue";
 import { getImageUrl } from "@/helpers/getImageUrl.ts";
+import { onBeforeRouteUpdate } from "vue-router";
+import FriendApi from "@/Service/API/friends.ts";
 
 const props = defineProps({
   friends: Array,
+});
+
+const friends = ref(props.friends);
+
+onBeforeRouteUpdate(async (to, from) => {
+  friends.value = await FriendApi.getFriends(to.params.id);
 });
 </script>
 <style>

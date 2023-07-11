@@ -2,12 +2,12 @@
   <select-avatar
     @change-avatar-visible="selectAvatarVisible = !selectAvatarVisible"
     :selectAvatarVisible="selectAvatarVisible"
-    @update-avatar="(img) => $emit('updateAvatar', img)"
+    @update-avatar="updateAvatar"
   />
   <div class="profile-header">
     <div>
       <div class="avatar">
-        <img :src="getImageUrl(props.user.img)" alt="Аватар" />
+        <img :src="getImageUrl(user.img)" alt="Аватар" />
       </div>
       <div v-if="user.id !== userStore.getUser.id">
         <v-btn v-if="user.status === 0">Отменить запрос</v-btn>
@@ -17,29 +17,28 @@
       <v-btn v-if="route.params.id == userStore.getUser.id" @click="selectAvatarVisible = true">Сменить аватар</v-btn>
     </div>
     <div class="info">
-      <div class="name">{{ props.user.name }} {{ props.user.surname }}</div>
+      <div class="name">{{ user.name }} {{ user.surname }}</div>
       <div class="status">status</div>
-      <div class="city">Город {{ props.user.city }}</div>
+      <div class="city">Город {{ user.city }}</div>
     </div>
     <div>
       <div class="last-visit">
         <span>Последний раз был в сети</span>
-        <span>{{ FormatDate(props.user.last_visit) }}</span>
+        <span>{{ FormatDate(user.last_visit) }}</span>
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { ref, defineEmits, onMounted } from "vue";
+import { ref } from "vue";
 import { useUserStore } from "@/stores/user.ts";
-import { useRoute } from "vue-router";
+import { useRoute, onBeforeRouteUpdate } from "vue-router";
 import { getImageUrl } from "@/helpers/getImageUrl.ts";
 import AvatarApi from "@/modules/UserPage/API/avatar.ts";
 import SelectAvatar from "./SelectAvatar.vue";
 import FriendApi from "@/Service/API/friends.ts";
 import { FormatDate } from "../helpers/FormatDate.ts";
-
-const emits = defineEmits(["updateAvatar"]);
+import UserApi from "@/Service/API/users";
 
 const props = defineProps({
   user: Object,
@@ -48,11 +47,19 @@ const props = defineProps({
 const userStore = useUserStore();
 const route = useRoute();
 
+const user = ref(props.user)
+const selectAvatarVisible = ref(false);
+
 async function sendFriendRequest() {
   await FriendApi.addFriend(userStore.getUser.id, route.params.id);
 }
-
-const selectAvatarVisible = ref(false);
+function updateAvatar(img) {
+  user.value.img = img
+  userStore.changeField('img', img)
+}
+onBeforeRouteUpdate(async (to, from) => {
+  user.value = await UserApi.getUserInfo(to.params.id, userStore.getUser.id);
+})
 </script>
 <style scoped>
 .profile-header {

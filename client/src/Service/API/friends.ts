@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default class FriendApi {
-  static async getMyFriends(id: number) {
+  static async getFriends(id: number) {
     const response = await axios.get(`http://localhost:8080/api/get-friends`, {
       params: {
         id,
