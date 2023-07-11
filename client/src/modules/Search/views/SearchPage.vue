@@ -1,5 +1,5 @@
 <template>
-  <div class="users-body">
+  <div class="body">
     <div class="title">Поиск людей</div>
     <div class="user-list">
       <user-item v-for="user in userList" :user="user" />
@@ -49,9 +49,5 @@ onBeforeRouteUpdate(async (to, from) => {
 .user-list {
   display: grid;
   gap: 10px;
-}
-.users-body {
-  padding: 40px 80px;
-  flex: 1 1 auto;
 }
 </style>

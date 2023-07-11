@@ -55,6 +55,10 @@ onMounted(async () => {
   z-index: 100;
   background-color: white;
 }
+.body {
+  padding: 40px 80px;
+  flex: 1 1 auto;
+}
 .content {
   display: flex;
   padding-top: 60px;
