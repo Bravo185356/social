@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="auth-wrapper">
     <registration-form />
   </div>
 </template>

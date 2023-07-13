@@ -38,7 +38,7 @@ import AvatarApi from "@/modules/UserPage/API/avatar.ts";
 import SelectAvatar from "./SelectAvatar.vue";
 import FriendApi from "@/Service/API/friends.ts";
 import { FormatDate } from "@/helpers/FormatDate.ts";
-import UserApi from "@/Service/API/users";
+import UserApi from "../API/user";
 
 const props = defineProps({
   user: Object,

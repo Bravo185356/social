@@ -1,10 +1,10 @@
 <template>
   <app-header />
-    <page-loader v-if="isLoadingStore.isLoading" />
-    <main :class="{ content: userStore.isLogined, 'content-not-auth': !userStore.isLogined }">
-      <left-sidebar v-if="userStore.isLogined" />
-      <router-view />
-    </main>
+  <page-loader v-if="isLoadingStore.isLoading" />
+  <main :class="{ content: userStore.isLogined, 'content-not-auth': !userStore.isLogined }">
+    <left-sidebar v-if="userStore.isLogined" />
+    <router-view />
+  </main>
 </template>
 <script setup lang="ts">
 import { useRouter } from "vue-router";
@@ -16,7 +16,7 @@ import AppHeader from "@/components/AppHeader.vue";
 import RequestsApi from "@/Service/API/requests.ts";
 import PageLoader from "@/UI/PageLoader.vue";
 import { useIsLoading } from "@/stores/isLoading";
-import UserApi from '@/Service/API/users.ts'
+import UserApi from "@/Service/API/user.ts";
 
 const userStore = useUserStore();
 const isLoadingStore = useIsLoading();
@@ -27,10 +27,10 @@ onMounted(async () => {
   const token = localStorage.getItem("token");
 
   window.addEventListener("beforeunload", () => {
-    UserApi.setLastVisitTime(userStore.getUser.id)
+    UserApi.setLastVisitTime(userStore.getUser.id);
   });
 
-  if(!token) {
+  if (!token) {
     router.push("/auth/login");
   }
 });
@@ -86,5 +86,9 @@ a {
   &:hover {
     color: #1976d2;
   }
+}
+.auth-wrapper {
+  margin: 0px auto;
+  max-width: 800px;
 }
 </style>
