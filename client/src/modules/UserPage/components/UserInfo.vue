@@ -37,7 +37,7 @@ import { getImageUrl } from "@/helpers/getImageUrl.ts";
 import AvatarApi from "@/modules/UserPage/API/avatar.ts";
 import SelectAvatar from "./SelectAvatar.vue";
 import FriendApi from "@/Service/API/friends.ts";
-import { FormatDate } from "../helpers/FormatDate.ts";
+import { FormatDate } from "@/helpers/FormatDate.ts";
 import UserApi from "@/Service/API/users";
 
 const props = defineProps({
@@ -98,3 +98,4 @@ onBeforeRouteUpdate(async (to, from) => {
   text-align: right;
 }
 </style>
+../../../helpers/FormatDate

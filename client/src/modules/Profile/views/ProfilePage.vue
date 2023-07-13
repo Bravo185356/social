@@ -5,7 +5,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import ProfileInfo from '../components/ProfileInfo.vue'
+import ProfileInfo from "../components/ProfileInfo.vue";
 import { useUserStore } from "@/stores/user.ts";
 import { useRouter } from "vue-router";
 
