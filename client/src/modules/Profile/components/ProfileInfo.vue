@@ -7,21 +7,21 @@
       <div>Имя {{ userStore.getUser.name }} {{ userStore.getUser.name }}</div>
       <div>Логин: {{ userStore.getUser.login }}</div>
       <div>Город: {{ userStore.getUser.city }}</div>
-      <div>Дата регистрации: {{ userStore.getUser.registration_date }}</div>
-      <div></div>
+      <div>Дата регистрации: {{ FormatDate(userStore.getUser.registration_date) }}</div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user.ts";
 import { getImageUrl } from "@/helpers/getImageUrl.ts";
+import { FormatDate } from "@/helpers/FormatDate.ts";
 
 const userStore = useUserStore();
 </script>
 <style scoped lang="scss">
 .info-wrapper {
-    display: flex;
-    gap: 30px;
+  display: flex;
+  gap: 30px;
 }
 .img-block {
   position: relative;

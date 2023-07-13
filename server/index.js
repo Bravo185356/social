@@ -6,6 +6,7 @@ const friendsRouter = require("./routes/friends.routes");
 const avatarRouter = require("./routes/avatar.routes");
 const postRouter = require("./routes/post.routes");
 const requestsRouter = require("./routes/requests.routes");
+const SearchController = require("./routes/search.routes")
 
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -28,5 +29,6 @@ app.use("/api", friendsRouter);
 app.use("/api", avatarRouter);
 app.use("/api", postRouter);
 app.use("/api", requestsRouter)
+app.use("/api", SearchController)
 
 app.listen(PORT, () => console.log(`working on ${PORT}`));
