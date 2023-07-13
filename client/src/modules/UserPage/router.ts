@@ -1,4 +1,4 @@
-import UserApi from "@/Service/API/users";
+import UserApi from "./API/user";
 import Module from "./Module.vue";
 import UserPage from "./views/UserPage.vue";
 import FriendApi from "@/Service/API/friends";

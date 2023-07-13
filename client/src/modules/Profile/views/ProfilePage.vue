@@ -1,21 +1,34 @@
 <template>
   <div class="body">
     <profile-info />
-    <v-btn @click="logout">Выйти</v-btn>
+    <div class="profile-actions">
+      <v-btn @click="logout">Выйти</v-btn>
+      <v-btn @click="deleteUser">Удалить страницу</v-btn>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
 import ProfileInfo from "../components/ProfileInfo.vue";
+import UserApi from "@/Service/API/user.ts";
 import { useUserStore } from "@/stores/user.ts";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-const store = useUserStore();
+const userStore = useUserStore();
 
 function logout() {
   localStorage.removeItem("token");
-  store.$reset();
+  userStore.$reset();
   router.push("/auth/login");
 }
+async function deleteUser() {
+  UserApi.deleteUser(userStore.getUser.id);
+  logout();
+}
 </script>
-<style lang="scss"></style>
+<style scoped lang="scss">
+.profile-actions {
+  display: flex;
+  gap: 10px;
+}
+</style>
