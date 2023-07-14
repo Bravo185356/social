@@ -8,11 +8,11 @@ class AuthController {
     const { name, surname, login, password, city } = req.body;
     const errors = validationResult(req).formatWith((error) => error.msg);
     if (!errors.isEmpty()) {
-      return res.json({ errors: errors.array() });
+      return res.json({ error: errors.array() });
     }
     const isUserExisting = await db.query(`SELECT id FROM users where login = $1`, [login]);
     if (isUserExisting.rows[0]) {
-      return res.json({ error: "Такой пользователь уже существует" });
+      return res.json({ error: ["Такой пользователь уже существует"] });
     }
     const hashPassword = await bcrypt.hash(password, 7);
     const date = new Date().toISOString();
@@ -35,18 +35,25 @@ class AuthController {
     }
   }
   async loginByForm(req, res) {
-    const { login, password } = req.body;
-    const hashPassword = await db.query(`SELECT password FROM users where login = $1`, [login]);
-    const match = await bcrypt.compare(password, hashPassword.rows[0].password);
-    if (match) {
+    const { login } = req.body;
+    const errors = validationResult(req).formatWith((error) => error.msg).array();
+    if(errors.length) {
+      const formatErrors = Array.from(new Set(errors))
+      return res.json({ error: formatErrors });
+    }
       const user = await db.query(
         `SELECT id, name, surname, city, login, img, last_visit, registration_date FROM users where login = $1`,
         [login]
       );
       res.json(user.rows[0]);
-    } else {
-      res.json({ error: "Неверный логин или пароль" });
+  }
+  async checkPassword(login, password) {
+    const hashPassword = await db.query(`SELECT password FROM users where login = $1`, [login]);
+    if(!hashPassword.rows[0]) {
+      return false
     }
+    const match = await bcrypt.compare(password, hashPassword.rows[0].password);
+    return match
   }
 }
 

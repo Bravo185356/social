@@ -27,12 +27,13 @@ export default class AuthApi {
     return response.data;
   }
   static async createUser({ name, surname, login, password, city }: CreateUserProps) {
-    await axios.post(`http://localhost:8080/api/create`, {
+    const response = await axios.post(`http://localhost:8080/api/create`, {
       name,
       surname,
       login,
       password,
       city,
     });
+    return response.data
   }
 }
