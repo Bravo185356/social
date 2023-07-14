@@ -1,4 +1,5 @@
 <template>
+  <error-block :errors="errors" />
   <v-form>
     <v-text-field v-model="firstName" :counter="10" label="first name" required></v-text-field>
     <v-text-field v-model="surname" :counter="10" label="surname" required></v-text-field>
@@ -12,6 +13,7 @@
 <script setup lang="ts">
 import AuthApi from "@/Service/API/auth";
 import { ref } from "vue";
+import ErrorBlock from "./ErrorBlock.vue";
 
 const firstName = ref("");
 const surname = ref("");
@@ -19,6 +21,7 @@ const login = ref("");
 const password = ref("");
 const confirmPassword = ref("");
 const city = ref("");
+const errors = ref([]);
 
 async function createUser() {
   const formInputs = {
@@ -29,10 +32,9 @@ async function createUser() {
     city: city.value,
   };
   const response = await AuthApi.createUser(formInputs);
+  if (response.error) {
+    errors.value = response.error
+  }
 }
 </script>
-<style lang="scss">
-.modal {
-  padding: 10px;
-}
-</style>
+<style lang="scss"></style>

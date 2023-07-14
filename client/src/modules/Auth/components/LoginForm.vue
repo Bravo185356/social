@@ -1,6 +1,6 @@
 <template>
+  <error-block :errors="errors" />
   <v-form>
-    <div class="error" v-if="errorMessage">{{ errorMessage }}</div>
     <v-text-field v-model="login" :counter="10" label="Логин" required></v-text-field>
     <v-text-field v-model="password" :counter="10" label="Пароль" required></v-text-field>
     <div>Нет аккаунта?<router-link to="/auth/registration"> Создайте его</router-link></div>
@@ -12,10 +12,11 @@ import { ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user.ts";
 import AuthApi from "@/Service/API/auth";
+import ErrorBlock from "./ErrorBlock.vue";
 
 const login = ref("");
 const password = ref("");
-const errorMessage = ref("");
+const errors = ref([]);
 
 const store = useUserStore();
 const router = useRouter();
@@ -27,7 +28,7 @@ async function loginUser() {
     localStorage.setItem("token", user.id);
     router.push("/");
   } else {
-    errorMessage.value = user.error;
+    errors.value = user.error;
   }
 }
 </script>
