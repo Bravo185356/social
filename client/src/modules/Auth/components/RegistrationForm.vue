@@ -28,6 +28,7 @@ async function createUser() {
     name: firstName.value,
     surname: surname.value,
     login: login.value,
+    confirmPassword: confirmPassword.value,
     password: password.value,
     city: city.value,
   };

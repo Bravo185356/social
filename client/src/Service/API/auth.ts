@@ -9,6 +9,7 @@ interface CreateUserProps {
   surname: string;
   login: string;
   password: string;
+  confirmPassword: string;
   city: string;
 }
 
@@ -26,12 +27,13 @@ export default class AuthApi {
     });
     return response.data;
   }
-  static async createUser({ name, surname, login, password, city }: CreateUserProps) {
+  static async createUser({ name, surname, login, password, confirmPassword, city }: CreateUserProps) {
     const response = await axios.post(`http://localhost:8080/api/create`, {
       name,
       surname,
       login,
       password,
+      confirmPassword,
       city,
     });
     return response.data

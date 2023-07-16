@@ -10,10 +10,6 @@ class AuthController {
     if (!errors.isEmpty()) {
       return res.json({ error: errors.array() });
     }
-    const isUserExisting = await db.query(`SELECT id FROM users where login = $1`, [login]);
-    if (isUserExisting.rows[0]) {
-      return res.json({ error: ["Такой пользователь уже существует"] });
-    }
     const hashPassword = await bcrypt.hash(password, 7);
     const date = new Date().toISOString();
     await db.query(
@@ -54,6 +50,10 @@ class AuthController {
     }
     const match = await bcrypt.compare(password, hashPassword.rows[0].password);
     return match
+  }
+  async checkUserExisting(login) {
+    const isUserExisting = await db.query(`SELECT id FROM users where login = $1`, [login]);
+    return isUserExisting.rows[0] ? false : true
   }
 }
 
