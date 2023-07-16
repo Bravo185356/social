@@ -22,11 +22,11 @@
   </v-dialog>
 </template>
 <script setup lang="ts">
-import { computed, defineEmits, ref, onMounted } from "vue";
+import { computed, defineEmits, ref, onMounted, onUpdated } from "vue";
 import { useRoute } from "vue-router";
 import { getImageUrl } from "@/helpers/getImageUrl.ts";
 import { useUserStore } from "@/stores/user.ts";
-import AvatarApi from "@/modules/UserPage/API/avatar.ts";
+import AvatarApi from "@/Service/API/avatar.ts";
 
 const emit = defineEmits(["changeAvatarVisible", "updateAvatar"]);
 
@@ -35,7 +35,7 @@ const props = defineProps({
 });
 
 const userStore = useUserStore();
-const route = useRoute()
+const route = useRoute();
 
 const file = ref(null);
 const recentImages = ref([]);
@@ -47,14 +47,14 @@ async function selectAvatarFromRecent(img) {
   const image = await AvatarApi.selectFromRecentAvatars(userStore.getUser.id, img);
 }
 async function uploadAvatar() {
-  if(file.value) {
+  if (file.value) {
     const formData = new FormData();
-  
+
     formData.append("avatar", file.value);
-    formData.append("id", route.params.id);
-  
+    formData.append("id", userStore.getUser.id);
+
     const response = await AvatarApi.updateAvatar(formData);
-    recentImages.value = response.recent
+    recentImages.value = response.recent;
 
     emit("updateAvatar", response.img);
     emit("changeAvatarVisible");
@@ -64,14 +64,16 @@ const avatarModalVisible = computed({
   get() {
     return props.selectAvatarVisible;
   },
-  set(newValue) {
-    emit("changeAvatarVisible", newValue);
+  set() {
+    emit("changeAvatarVisible");
   },
 });
-onMounted(async () => {
-  const images = await AvatarApi.getRecentAvatars(userStore.getUser.id);
-  recentImages.value = images;
-});
+onUpdated(async () => {
+  if(props.selectAvatarVisible) {
+    const images = await AvatarApi.getRecentAvatars(userStore.getUser.id);
+    recentImages.value = images;
+  }
+})
 </script>
 <style scoped>
 .v-btn {
@@ -114,3 +116,4 @@ onMounted(async () => {
   gap: 20px;
 }
 </style>
+@/Service/API/avatar
