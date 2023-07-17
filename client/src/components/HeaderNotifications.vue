@@ -40,8 +40,7 @@ async function rejectRequest(requestId) {
 }
 
 onMounted(async () => {
-  const token = localStorage.getItem("token");
-  const notificationsList = await RequestApi.getRequests(token);
+  const notificationsList = await RequestApi.getRequests(userStore.getUser.id);
   notifications.value = notificationsList;
 });
 </script>

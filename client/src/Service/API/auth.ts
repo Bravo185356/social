@@ -23,7 +23,7 @@ export default class AuthApi {
   }
   static async loginOnPageLoad(token: string) {
     const response = await axios.post("http://localhost:8080/api/login", {
-      id: token,
+      token,
     });
     return response.data;
   }

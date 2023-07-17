@@ -2,6 +2,8 @@ const db = require("../db");
 const bcrypt = require("bcrypt");
 const defaultImg = require("../constants");
 const { validationResult } = require("express-validator");
+const jwt = require('jsonwebtoken')
+
 
 class AuthController {
   async createUser(req, res) {
@@ -19,29 +21,36 @@ class AuthController {
     res.json("Пользователь успешно зарегистрирован");
   }
   async loginOnPageLoad(req, res) {
-    const { id } = req.body;
-    const user = await db.query(
-      `SELECT id, name, surname, city, login, img, last_visit, registration_date FROM users where id = $1`,
-      [id]
-    );
-    if (user) {
-      res.json(user.rows[0]);
-    } else {
-      res.json({ error: "Не удалось авторизоваться" });
+    const { token } = req.body;
+    const result = jwt.verify(token, 'secret', function(error, decoded) {
+      if(error) {
+        res.json({ error })
+      } else {
+        return decoded
+      }
+    })
+    if(result) {
+      const user = await db.query(
+        `SELECT id, name, surname, city, login, img, last_visit, registration_date FROM users where login = $1`,
+        [result.login]
+      );
+      const token = jwt.sign({ login: result.login, password: result.password }, 'secret', { expiresIn: '10s' });
+      res.json({ user: user.rows[0], newToken: token });
     }
   }
   async loginByForm(req, res) {
-    const { login } = req.body;
+    const { login, password } = req.body;
     const errors = validationResult(req).formatWith((error) => error.msg).array();
     if(errors.length) {
       const formatErrors = Array.from(new Set(errors))
       return res.json({ error: formatErrors });
     }
-      const user = await db.query(
-        `SELECT id, name, surname, city, login, img, last_visit, registration_date FROM users where login = $1`,
-        [login]
-      );
-      res.json(user.rows[0]);
+    const user = await db.query(
+      `SELECT id, name, surname, city, login, img, last_visit, registration_date FROM users where login = $1`,
+      [login]
+    );
+    const token = jwt.sign({ login, password }, 'secret', { expiresIn: '24h' });
+    res.json({ user: user.rows[0], token });
   }
   async checkPassword(login, password) {
     const hashPassword = await db.query(`SELECT password FROM users where login = $1`, [login]);

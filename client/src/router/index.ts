@@ -53,8 +53,13 @@ router.beforeEach(async (to, from) => {
 
   const token = localStorage.getItem('token')
   if(token && !userStore.isLogined) {
-    const user = await AuthApi.loginOnPageLoad(token!);
-    userStore.setUser(user);
+    const data = await AuthApi.loginOnPageLoad(token!);
+    if(data.error) {
+      localStorage.removeItem('token')
+      return 'auth/login'
+    }
+    userStore.setUser(data.user);
+    localStorage.setItem('token', data.newToken)
   }
   isLoadingStore.setIsLoading(true);
 });
