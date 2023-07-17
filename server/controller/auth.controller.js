@@ -34,7 +34,7 @@ class AuthController {
         `SELECT id, name, surname, city, login, img, last_visit, registration_date FROM users where login = $1`,
         [result.login]
       );
-      const token = jwt.sign({ login: result.login, password: result.password }, 'secret', { expiresIn: '10s' });
+      const token = jwt.sign({ login: result.login, password: result.password }, 'secret', { expiresIn: '24h' });
       res.json({ user: user.rows[0], newToken: token });
     }
   }
