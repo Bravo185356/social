@@ -3,6 +3,7 @@ import RootPage from "@/views/RootPage.vue";
 import AuthRoutes from "@/modules/Auth/index";
 import SearchRoutes from "@/modules/Search/index";
 import UserRoutes from "@/modules/UserPage/index";
+import ChatRoutes from '@/modules/Chat/index'
 import ProfileRoutes from '@/modules/Profile/index'
 import { useUserStore } from "@/stores/user";
 import { useIsLoading } from "@/stores/isLoading";
@@ -46,6 +47,7 @@ router.addRoute(AuthRoutes);
 router.addRoute(SearchRoutes);
 router.addRoute(UserRoutes);
 router.addRoute(ProfileRoutes);
+router.addRoute(ChatRoutes);
 
 router.beforeEach(async (to, from) => {
   const userStore = useUserStore();

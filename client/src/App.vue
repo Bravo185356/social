@@ -17,9 +17,11 @@ import RequestsApi from "@/Service/API/requests.ts";
 import PageLoader from "@/UI/PageLoader.vue";
 import { useIsLoading } from "@/stores/isLoading";
 import UserApi from "@/Service/API/user.ts";
+import { useWebsocketsStore } from "@/stores/websockets.ts";
 
 const userStore = useUserStore();
 const isLoadingStore = useIsLoading();
+const websocketStore = useWebsocketsStore();
 
 const router = useRouter();
 
@@ -33,6 +35,11 @@ onMounted(async () => {
   if (!token) {
     router.push("/auth/login");
   }
+  const wsChat = new WebSocket("ws://localhost:5000");
+  wsChat.onopen = () => {
+    wsChat.send(JSON.stringify({ type: "setId", id: userStore.getUser.id }));
+  };
+  websocketStore.setWebsocket('chat', wsChat)
 });
 </script>
 
