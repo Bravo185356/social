@@ -1,7 +1,7 @@
 const Router = require("express");
 const router = new Router();
 const { check } = require("express-validator");
-
+const AuthRepository = require('../repositories/authRepository')
 const AuthController = require("../controller/auth.controller");
 
 router.post(
@@ -10,7 +10,7 @@ router.post(
     check("login", "Логин не должен быть короче 6 символов")
       .trim()
       .custom(async (value) => {
-        const result = await AuthController.checkUserExisting(value);
+        const result = await AuthRepository.isUserExisting(value);
         if (!result) {
           throw new Error("Такой пользователь уже существует");
         }

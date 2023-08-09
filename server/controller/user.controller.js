@@ -1,14 +1,14 @@
-const db = require("../db");
+const UserRepository = require("../repositories/userRepository");
 
 class UserController {
   async setLastVisitTime(req) {
     const { id } = req.body;
     const date = new Date().toISOString();
-    await db.query(`UPDATE users SET last_visit = $1 WHERE id = $2`, [date, id]);
+    await UserRepository.setLastVisitTime(date, id);
   }
   async deleteUser(req) {
-    const { id } = req.body
-    await db.query(`DELETE FROM users WHERE id = $1`, [id])
+    const { id } = req.body;
+    await UserRepository.deleteUser(id)
   }
 }
 

@@ -1,19 +1,19 @@
-const db = require("../db");
+const PostRepository = require('../repositories/postRepository')
 
 class PostController {
   async createPost(req, res) {
     const { content, userId } = req.body;
-    const newPost = await db.query(`INSERT INTO posts (content, user_id) values ($1, $2) RETURNING *`, [content, userId]);
-    res.json(newPost.rows[0]);
+    const newPost = await PostRepository.createPost(content, userId);
+    res.json(newPost);
   }
   async deletePost(req, res) {
     const { id } = req.body;
-    await db.query(`DELETE FROM posts WHERE id = $1`, [id]);
+    await PostRepository.deletePost(id);
   }
   async getUserPosts(req, res) {
     const id = req.query.id;
-    const posts = await db.query(`SELECT * FROM posts where user_id = $1`, [id]);
-    res.json(posts.rows);
+    const posts = await PostRepository.getUserPosts(id);
+    res.json(posts);
   }
 }
 

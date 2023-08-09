@@ -1,9 +1,8 @@
-const db = require("../db");
 const bcrypt = require("bcrypt");
 const defaultImg = require("../constants");
 const { validationResult } = require("express-validator");
 const jwt = require('jsonwebtoken')
-
+const AuthRepository = require('../repositories/authRepository')
 
 class AuthController {
   async createUser(req, res) {
@@ -14,10 +13,7 @@ class AuthController {
     }
     const hashPassword = await bcrypt.hash(password, 7);
     const date = new Date().toISOString();
-    await db.query(
-      `INSERT INTO users (name, surname, login, password, city, registration_date, last_visit, img) values ($1, $2, $3, $4, $5, $6, $6, $7)`,
-      [name, surname, login, hashPassword, city, date, defaultImg]
-    );
+    await AuthRepository.createUser(name, surname, login, hashPassword, city, date, defaultImg)
     res.json("Пользователь успешно зарегистрирован");
   }
   async loginOnPageLoad(req, res) {
@@ -30,12 +26,9 @@ class AuthController {
       }
     })
     if(result) {
-      const user = await db.query(
-        `SELECT id, name, surname, city, login, img, last_visit, registration_date FROM users where login = $1`,
-        [result.login]
-      );
+      const user = await AuthRepository.getUser(result.login)
       const token = jwt.sign({ login: result.login, password: result.password }, 'secret', { expiresIn: '24h' });
-      res.json({ user: user.rows[0], newToken: token });
+      res.json({ user, newToken: token });
     }
   }
   async loginByForm(req, res) {
@@ -45,24 +38,17 @@ class AuthController {
       const formatErrors = Array.from(new Set(errors))
       return res.json({ error: formatErrors });
     }
-    const user = await db.query(
-      `SELECT id, name, surname, city, login, img, last_visit, registration_date FROM users where login = $1`,
-      [login]
-    );
+    const user = await AuthRepository.getUser(login)
     const token = jwt.sign({ login, password }, 'secret', { expiresIn: '24h' });
-    res.json({ user: user.rows[0], token });
+    res.json({ user, token });
   }
   async checkPassword(login, password) {
-    const hashPassword = await db.query(`SELECT password FROM users where login = $1`, [login]);
-    if(!hashPassword.rows[0]) {
+    const hashPassword = await AuthRepository.getHashPassword(login);
+    if(!hashPassword) {
       return false
     }
-    const match = await bcrypt.compare(password, hashPassword.rows[0].password);
+    const match = await bcrypt.compare(password, hashPassword.password);
     return match
-  }
-  async checkUserExisting(login) {
-    const isUserExisting = await db.query(`SELECT id FROM users where login = $1`, [login]);
-    return isUserExisting.rows[0] ? false : true
   }
 }
 
