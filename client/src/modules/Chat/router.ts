@@ -12,7 +12,7 @@ const moduleRoute = {
       component: ChatPage,
     },
     { 
-        path: ":id/:chatId", 
+        path: ":chatId", 
         name: 'dialog',
         component: DialogPage
     },
