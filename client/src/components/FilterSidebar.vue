@@ -22,7 +22,7 @@ const name = ref("");
 
 function resetFilter() {
   name.value = ''
-  router.push('/search')
+  router.push(route.path)
 }
 const resetButtonVisible = computed(() => {
     return Object.keys(route.query).length
