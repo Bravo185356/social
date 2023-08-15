@@ -28,9 +28,9 @@ const router = useRouter();
 const showFriendList = ref(false);
 const friendList = ref([]);
 const chatList = ref([]);
-// id чата это конкатенация id пользователя с которым создаешь чат и твоего id
+
 function getNewChatId(id) {
-  return Number(`${id}${userStore.getUser.id}`);
+  return Math.floor(Date.now() + Math.random());
 }
 async function showFriends() {
   showFriendList.value = !showFriendList.value;
