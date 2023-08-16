@@ -1,6 +1,8 @@
 import ChatPage from "./views/ChatPage.vue";
 import Module from "./Module.vue";
-import DialogPage from "./views/DialogPage.vue";
+import ChatApi from "./API/chat";
+import FriendApi from "@/Service/API/friends";
+import { useUserStore } from "@/stores/user";
 
 const moduleRoute = {
   path: "/messager",
@@ -10,11 +12,16 @@ const moduleRoute = {
       path: "",
       name: "chat",
       component: ChatPage,
-    },
-    { 
-        path: ":chatId", 
-        name: 'dialog',
-        component: DialogPage
+      props: true,
+      beforeEnter: async (to: any) => {
+        const userStore = useUserStore();
+
+        const chats = await ChatApi.getAllChats(userStore.getUser.id);
+        to.params.chats = chats;
+
+        const friends = await FriendApi.getFriends(userStore.getUser.id);
+        to.params.friends = friends;
+      },
     },
   ],
 };

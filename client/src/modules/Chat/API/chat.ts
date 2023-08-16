@@ -23,7 +23,15 @@ export default class ChatApi {
                 chatId
             }
         })
-        console.log(response.data)
+        return response.data
+    }
+    static async getUsersInfo(user_1: number, user_2: number) {
+        const response = await axios.get('http://localhost:8080/api/chat/get-user-info', {
+            params: {
+                user_1,
+                user_2
+            }
+        })
         return response.data
     }
 }

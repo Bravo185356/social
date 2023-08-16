@@ -24,6 +24,11 @@ class ChatController {
     const users = await ChatRepository.getUsersInChat(chatId)
     res.json(users);
   }
+  async getUserInfo(req, res) {
+    const { user_1, user_2 } = req.query
+    const user = await ChatRepository.getUserInfo(user_1, user_2)
+    res.json(user)
+  }
 }
 
 module.exports = new ChatController();
