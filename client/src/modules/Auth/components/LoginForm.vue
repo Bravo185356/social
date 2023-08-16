@@ -22,13 +22,13 @@ const store = useUserStore();
 const router = useRouter();
 
 async function loginUser() {
-  const { user, token } = await AuthApi.loginByForm({ login: login.value, password: password.value });
-  if (!user.error) {
+  const { user, token, error } = await AuthApi.loginByForm({ login: login.value, password: password.value });
+  if (!error) {
     store.setUser(user);
     localStorage.setItem("token", token);
     router.push("/");
   } else {
-    errors.value = user.error;
+    errors.value = error;
   }
 }
 </script>
