@@ -11,7 +11,7 @@
 import { onBeforeRouteUpdate, useRouter } from "vue-router";
 import { ref } from "vue";
 import FilterSidebar from "@/components/FilterSidebar.vue";
-import UserItem from "@/modules/Search/components/UserItem.vue";
+import UserItem from "@/components/UserItem.vue";
 import SearchApi from "../API/SearchApi.ts";
 
 const props = defineProps({
