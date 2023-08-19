@@ -2,7 +2,8 @@ const bcrypt = require("bcrypt");
 const defaultImg = require("../constants");
 const { validationResult } = require("express-validator");
 const jwt = require('jsonwebtoken')
-const AuthRepository = require('../repositories/authRepository')
+const AuthRepository = require('../repositories/authRepository');
+const UserRepository = require("../repositories/userRepository");
 
 class AuthController {
   async createUser(req, res) {
@@ -13,7 +14,8 @@ class AuthController {
     }
     const hashPassword = await bcrypt.hash(password, 7);
     const date = new Date().toISOString();
-    await AuthRepository.createUser(name, surname, login, hashPassword, city, date, defaultImg)
+    const newUser = await AuthRepository.createUser(name, surname, login, hashPassword, city, date, defaultImg)
+    await UserRepository.createOnlineStatusRow(newUser.id)
     res.json("Пользователь успешно зарегистрирован");
   }
   async loginOnPageLoad(req, res) {
@@ -27,8 +29,9 @@ class AuthController {
     })
     if(result) {
       const user = await AuthRepository.getUser(result.login)
+      const onlineStatus = await UserRepository.changeOnlineStatus(user.id, 1)
       const token = jwt.sign({ login: result.login, password: result.password }, 'secret', { expiresIn: '24h' });
-      res.json({ user, newToken: token });
+      res.json({ user, onlineStatus, newToken: token });
     }
   }
   async loginByForm(req, res) {
@@ -39,8 +42,9 @@ class AuthController {
       return res.json({ error: formatErrors });
     }
     const user = await AuthRepository.getUser(login)
+    const onlineStatus = await UserRepository.changeOnlineStatus(user.id, 1)
     const token = jwt.sign({ login, password }, 'secret', { expiresIn: '24h' });
-    res.json({ user, token });
+    res.json({ user, onlineStatus, token });
   }
   async checkPassword(login, password) {
     const hashPassword = await AuthRepository.getHashPassword(login);

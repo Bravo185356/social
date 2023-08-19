@@ -10,15 +10,15 @@
         <img :src="getImageUrl(user.img)" alt="Аватар" />
       </div>
       <div v-if="user.id !== userStore.getUser.id">
-        <v-btn v-if="user.status === 0">Отменить запрос</v-btn>
-        <v-btn v-else-if="user.status === 1">Удалить из друзей</v-btn>
+        <v-btn v-if="user.friend_status === 0">Отменить запрос</v-btn>
+        <v-btn v-else-if="user.friend_status === 1">Удалить из друзей</v-btn>
         <v-btn v-else @click="sendFriendRequest">Добавить в друзья</v-btn>
       </div>
       <v-btn v-if="route.params.id == userStore.getUser.id" @click="selectAvatarVisible = true">Сменить аватар</v-btn>
     </div>
     <div class="info">
       <div class="name">{{ user.name }} {{ user.surname }}</div>
-      <div class="status">status</div>
+      <div v-if="user.status" class="status">Online</div>
       <div class="city">Город {{ user.city }}</div>
     </div>
     <div>

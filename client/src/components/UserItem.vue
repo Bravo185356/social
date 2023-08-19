@@ -6,6 +6,7 @@
       </div>
       <div class="user-info">
         <router-link :to="{ path: `/${user.id}` }">{{ user.name }} {{ user.surname }}</router-link>
+        <div v-if="user.status">Online</div>
         <div>id: {{ user.id }}</div>
         <div>{{ user.city }}</div>
       </div>

@@ -1,5 +1,6 @@
 const ChatController = require("./controller/chat.controller");
 const ws = require("ws");
+const UserRepository = require("./repositories/userRepository");
 
 class Websockets {
   createChatWebsocket() {
@@ -29,6 +30,9 @@ class Websockets {
             break;
         }
       });
+      ws.on('close', (e) => {
+        UserRepository.changeOnlineStatus(ws.id, 0)
+      })
     });
   }
 }

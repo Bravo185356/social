@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import LeftSidebar from "@/components/LeftSidebar.vue";
-import { onMounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
 import { useUserStore } from "@/stores/user.ts";
 import AuthApi from "@/Service/API/auth";
 import AppHeader from "@/components/AppHeader.vue";
@@ -35,11 +35,6 @@ onMounted(async () => {
   if (!token) {
     router.push("/auth/login");
   }
-  const wsChat = new WebSocket("ws://localhost:5000");
-  wsChat.onopen = () => {
-    wsChat.send(JSON.stringify({ type: "setId", id: userStore.getUser.id }));
-  };
-  websocketStore.setWebsocket('chat', wsChat)
 });
 </script>
 
