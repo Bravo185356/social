@@ -5,7 +5,7 @@ const AuthRepository = require('../repositories/authRepository')
 const AuthController = require("../controller/auth.controller");
 
 router.post(
-  "/create",
+  "/auth/create",
   [
     check("login", "Логин не должен быть короче 6 символов")
       .trim()
@@ -29,9 +29,9 @@ router.post(
   ],
   AuthController.createUser
 );
-router.post("/login", AuthController.loginOnPageLoad);
+router.post("/auth/login", AuthController.loginOnPageLoad);
 router.post(
-  "/login-by-form",
+  "/auth/login-by-form",
   [
     check("login", "Неверный логин или пароль").trim().notEmpty(),
     check("password", "Неверный логин или пароль")

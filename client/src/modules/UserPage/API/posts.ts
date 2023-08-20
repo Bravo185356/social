@@ -7,19 +7,15 @@ interface BodyProps {
 
 export default class PostsApi {
   static async getUserPosts(id: number) {
-    const response = await axios.get(`http://localhost:8080/api/get-posts`, {
-      params: {
-        id: id
-      }
-    })
+    const response = await axios.get(`http://localhost:8080/api/posts/${id}`)
     return response.data
   }
   static async createPost(body: BodyProps) {
-    const response = await axios.post("http://localhost:8080/api/create-post", body);
+    const response = await axios.post("http://localhost:8080/api/post/create", body);
     return response.data;
   }
   static async deletePost(id: number) {
-    const response = await axios.delete(`http://localhost:8080/api/delete-post`, {
+    const response = await axios.delete(`http://localhost:8080/api/post/delete`, {
       data: {
         id: id
       } 

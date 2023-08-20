@@ -11,8 +11,8 @@ class PostController {
     await PostRepository.deletePost(id);
   }
   async getUserPosts(req, res) {
-    const id = req.query.id;
-    const posts = await PostRepository.getUserPosts(id);
+    const { userId } = req.params;
+    const posts = await PostRepository.getUserPosts(userId);
     res.json(posts);
   }
 }

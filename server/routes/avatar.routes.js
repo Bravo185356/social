@@ -14,8 +14,8 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-router.post("/change-avatar", upload.single("avatar"), AvatarController.uploadAvatar);
-router.get('/get-avatars', AvatarController.getRecentAvatars)
-router.post('/select-avatar', AvatarController.selectFromRecent)
+router.post("/avatar/change", upload.single("avatar"), AvatarController.uploadAvatar);
+router.get('/avatars/recent/:userId', AvatarController.getRecentAvatars)
+router.post('/avatar/select', AvatarController.selectFromRecent)
 
 module.exports = router;

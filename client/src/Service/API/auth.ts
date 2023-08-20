@@ -15,20 +15,20 @@ interface CreateUserProps {
 
 export default class AuthApi {
   static async loginByForm({ login, password }: LoginByFormProps) {
-    const response = await axios.post("http://localhost:8080/api/login-by-form", {
+    const response = await axios.post("http://localhost:8080/api/auth/login-by-form", {
       login,
       password,
     });
     return response.data;
   }
   static async loginOnPageLoad(token: string) {
-    const response = await axios.post("http://localhost:8080/api/login", {
+    const response = await axios.post("http://localhost:8080/api/auth/login", {
       token,
     });
     return response.data;
   }
   static async createUser({ name, surname, login, password, confirmPassword, city }: CreateUserProps) {
-    const response = await axios.post(`http://localhost:8080/api/create`, {
+    const response = await axios.post(`http://localhost:8080/api/auth/create`, {
       name,
       surname,
       login,

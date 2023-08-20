@@ -12,8 +12,8 @@ class AvatarController {
     res.json({ img, recent: newRecentAvatarsList });
   }
   async getRecentAvatars(req, res) {
-    const { id } = req.query;
-    const recentAvatars = await AvatarRepository.getRecentList(id);
+    const { userId } = req.params;
+    const recentAvatars = await AvatarRepository.getRecentList(userId);
     res.json(recentAvatars);
   }
   async selectFromRecent(req, res) {

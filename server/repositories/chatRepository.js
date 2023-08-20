@@ -11,11 +11,11 @@ class ChatRepository {
     );
     return chats;
   }
-  async getAllMessages(chatId) {
+  async getAllMessages(userId) {
     const messages = await db.query(
       `SELECT message_id, content, user_id, chat_id, name, surname, img FROM messages
         JOIN users ON users.id = messages.user_id AND messages.chat_id = $1`,
-      [chatId]
+      [userId]
     );
     return messages;
   }
@@ -36,15 +36,7 @@ class ChatRepository {
     ]);
     return newMessage[0];
   }
-  async getUsersInChat(chatId) {
-    const users = await db.query(
-      `SELECT name, surname, img, user_id, chat_id FROM chats_users
-        JOIN users ON chats_users.user_id = users.id AND chats_users.chat_id = $1`,
-      [chatId]
-    );
-    return users;
-  }
-  async getUserInfo(user_1, user_2) {
+  async getUsersInfo(user_1, user_2) {
     const user = await db.query(`SELECT id AS user_id, name, surname, img FROM users WHERE id = $1 OR id = $2`, [user_1, user_2])
     return user
   }

@@ -6,8 +6,8 @@ class FriendsController {
     await FriendsRepository.addFriend(myId, id);
   }
   async getFriendList(req, res) {
-    const id = req.query.id;
-    const friendList = await FriendsRepository.getFriendList(id);
+    const { userId } = req.params;
+    const friendList = await FriendsRepository.getFriendList(userId);
     res.json(friendList);
   }
   async getFriendsWithFilter(req, res) {

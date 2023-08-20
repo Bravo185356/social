@@ -76,15 +76,11 @@ onMounted(async () => {
     const message = JSON.parse(e.data);
     chatMessages.value.push(message.message);
   };
+  const usersInfo = await ChatApi.getUsersInfo(Number(route.query.id), userStore.getUser.id);
+  users.value.push(...usersInfo);
   if (checkForChatExisting.value) {
-    const userList = await ChatApi.getUsersInChat(checkForChatExisting.value.chat_id);
-    users.value = userList;
     const messages = await ChatApi.getAllMessages(checkForChatExisting.value.chat_id);
     chatMessages.value = messages;
-  } else {
-    // Если чат ещё не создан в БД, получаем инфо о пользователях
-    const usersInfo = await ChatApi.getUsersInfo(Number(route.query.id), userStore.getUser.id);
-    users.value.push(...usersInfo);
   }
 });
 </script>

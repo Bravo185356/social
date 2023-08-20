@@ -4,9 +4,9 @@ class UserRepository {
   async createOnlineStatusRow(login) {
     await db.query(`INSERT INTO online_status (user_id, status) values ((SELECT id FROM users WHERE login = $1), 0)`, [login]);
   }
-  async changeOnlineStatus(login, status) {
+  async changeOnlineStatus(id, status) {
     const onlineStatus = await db.query(`UPDATE online_status SET status = $2 WHERE user_id = $1 RETURNING status`, [
-      login,
+      id,
       status,
     ]);
     return onlineStatus[0].status;

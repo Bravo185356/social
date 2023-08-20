@@ -2,13 +2,13 @@ const ChatRepository = require('../repositories/chatRepository')
 
 class ChatController {
   async getAllChats(req, res) {
-    const { id } = req.query;
-    const chats = await ChatRepository.getAllChats(id)
+    const { userId } = req.params
+    const chats = await ChatRepository.getAllChats(userId)
     res.json(chats);
   }
   async getAllMessages(req, res) {
-    const { chatId } = req.query;
-    const messages = await ChatRepository.getAllMessages(chatId)
+    const { userId } = req.params;
+    const messages = await ChatRepository.getAllMessages(userId)
     res.json(messages);
   }
   async createNewChat(chatId, myId, userId) {
@@ -19,14 +19,9 @@ class ChatController {
     const newMessage = await ChatRepository.createNewMessage(chatId, myId, content)
     return newMessage;
   }
-  async getUsersInChat(req, res) {
-    const { chatId } = req.query;
-    const users = await ChatRepository.getUsersInChat(chatId)
-    res.json(users);
-  }
-  async getUserInfo(req, res) {
+  async getUsersInfo(req, res) {
     const { user_1, user_2 } = req.query
-    const user = await ChatRepository.getUserInfo(user_1, user_2)
+    const user = await ChatRepository.getUsersInfo(user_1, user_2)
     res.json(user)
   }
 }
