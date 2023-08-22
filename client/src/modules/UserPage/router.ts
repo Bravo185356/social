@@ -10,7 +10,7 @@ const moduleRoute = {
   props: true,
   beforeEnter: async (to: any) => {
     const userStore = useUserStore();
-
+      
     const userInfo = await UserApi.getUserInfo(to.params.id, userStore.getUser.id);
     const friendList = await FriendApi.getFriends(to.params.id);
     const postsList = await PostsApi.getUserPosts(to.params.id);

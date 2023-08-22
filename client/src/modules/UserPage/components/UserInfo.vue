@@ -18,7 +18,7 @@
     </div>
     <div class="info">
       <div class="name">{{ user.name }} {{ user.surname }}</div>
-      <div v-if="user.status" class="status">Online</div>
+      <div v-if="user.status || route.params.id == userStore.getUser.id" class="status">Online</div>
       <div class="city">Город {{ user.city }}</div>
     </div>
     <div>

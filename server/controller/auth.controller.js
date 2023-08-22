@@ -29,9 +29,8 @@ class AuthController {
     })
     if(result) {
       const user = await AuthRepository.getUser(result.login)
-      const onlineStatus = await UserRepository.changeOnlineStatus(user.id, 1)
       const token = jwt.sign({ login: result.login, password: result.password }, 'secret', { expiresIn: '24h' });
-      res.json({ user, onlineStatus, newToken: token });
+      res.json({ user, newToken: token });
     }
   }
   async loginByForm(req, res) {
@@ -42,9 +41,8 @@ class AuthController {
       return res.json({ error: formatErrors });
     }
     const user = await AuthRepository.getUser(login)
-    const onlineStatus = await UserRepository.changeOnlineStatus(user.id, 1)
     const token = jwt.sign({ login, password }, 'secret', { expiresIn: '24h' });
-    res.json({ user, onlineStatus, token });
+    res.json({ user, token });
   }
   async checkPassword(login, password) {
     const hashPassword = await AuthRepository.getHashPassword(login);

@@ -13,6 +13,7 @@ import { RouterLink, useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user.ts";
 import AuthApi from "@/Service/API/auth";
 import ErrorBlock from "./ErrorBlock.vue";
+import connectToWebsockets from '@/helpers/connectToWebsockets'
 
 const login = ref("");
 const password = ref("");
@@ -27,6 +28,7 @@ async function loginUser() {
     store.setUser(user);
     localStorage.setItem("token", token);
     router.push("/");
+    connectToWebsockets()
   } else {
     errors.value = error;
   }

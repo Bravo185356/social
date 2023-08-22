@@ -1,5 +1,6 @@
 const express = require("express");
-const Websockets = require('./websockets')
+const createChatWebsocket = require("./websockets/chatWebsocket");
+const createOnlineStatusWebsocket = require('./websockets/onlineWebsocket')
 
 const userRoutes = require("./routes/user.routes");
 const authRoutes = require("./routes/auth.routes");
@@ -15,7 +16,8 @@ const bodyParser = require("body-parser");
 
 const PORT = process.env.PORT || 8080;
 const app = express();
-Websockets.createChatWebsocket()
+createChatWebsocket();
+createOnlineStatusWebsocket()
 
 app.use(cors());
 app.use("/static", express.static("static"));

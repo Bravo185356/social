@@ -10,7 +10,7 @@ import { useIsLoading } from "@/stores/isLoading";
 import AuthApi from "@/Service/API/auth";
 import FriendApi from "@/Service/API/friends";
 import FriendsPage from "@/views/FriendsPage.vue";
-import { useWebsocketsStore } from "@/stores/websockets";
+import connectToWebsockets from "@/helpers/connectToWebsockets";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -52,7 +52,6 @@ router.addRoute(ChatRoutes);
 
 router.beforeEach(async (to, from) => {
   const userStore = useUserStore();
-  const websocketStore = useWebsocketsStore()
   const isLoadingStore = useIsLoading();
 
   const token = localStorage.getItem('token')
@@ -62,14 +61,8 @@ router.beforeEach(async (to, from) => {
       localStorage.removeItem('token')
       return 'auth/login'
     }
+    connectToWebsockets()
     userStore.setUser(data.user);
-    
-    const wsChat = new WebSocket("ws://localhost:5000");
-    wsChat.onopen = () => {
-      wsChat.send(JSON.stringify({ type: "setId", id: userStore.getUser.id }));
-    };
-    websocketStore.setWebsocket('chat', wsChat)
-
     localStorage.setItem('token', data.newToken)
   }
   isLoadingStore.setIsLoading(true);

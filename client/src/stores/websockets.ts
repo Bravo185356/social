@@ -2,16 +2,12 @@ import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 
 export const useWebsocketsStore = defineStore("websockets", () => {
-  const wsChats = ref(null) as any;
+  const websockets = ref({}) as any
 
   function setWebsocket(type: string, ws: WebSocket) {
-    switch (type) {
-      case "chat":
-        wsChats.value = ws;
-        break;
-    }
+    websockets.value[type] = ws
   }
-  const getWsChat = computed(() => wsChats.value)
+  const getWebsockets = computed(() => websockets.value)
 
-  return { setWebsocket, getWsChat };
+  return { setWebsocket, getWebsockets };
 });

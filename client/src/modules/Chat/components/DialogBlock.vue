@@ -72,7 +72,7 @@ const checkForChatExisting = computed(() => {
 });
 
 onMounted(async () => {
-  websocketStore.getWsChat.onmessage = (e) => {
+  websocketStore.getWebsockets.chat.onmessage = (e) => {
     const message = JSON.parse(e.data);
     chatMessages.value.push(message.message);
   };

@@ -20,9 +20,11 @@ import UserApi from "@/Service/API/user.ts";
 import { useUserStore } from "@/stores/user.ts";
 import { useRouter } from "vue-router";
 import SelectAvatar from "@/components/SelectAvatar.vue";
+import { useWebsocketsStore } from '@/stores/websockets.ts'
 
 const router = useRouter();
 const userStore = useUserStore();
+const websocketsStore = useWebsocketsStore()
 
 const selectAvatarVisible = ref(false);
 
@@ -33,6 +35,9 @@ function logout() {
   localStorage.removeItem("token");
   userStore.$reset();
   router.push("/auth/login");
+  for (const websocket in websocketsStore.getWebsockets) {
+    websocketsStore.getWebsockets[websocket].close()
+  }
 }
 async function deleteUser() {
   UserApi.deleteUser(userStore.getUser.id);
