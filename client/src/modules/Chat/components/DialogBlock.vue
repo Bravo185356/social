@@ -46,13 +46,11 @@ async function sendMessage() {
     type: "newMessage",
     chatId: Number(checkForChatExisting.value.chat_id),
     myId: userStore.getUser.id,
+    userId: Number(route.query.id),
     content: textMessage.value,
     isFirstMessage: isFirstMessage.value,
   };
-  if (isFirstMessage.value) {
-    body.userId = Number(route.query.id);
-  }
-  websocketStore.getWsChat.send(JSON.stringify(body));
+  websocketStore.getWebsockets.chat.send(JSON.stringify(body));
   if (isFirstMessage.value) {
     emit("updateChats");
   }
