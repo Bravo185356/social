@@ -23,6 +23,9 @@
     </div>
     <div>
       <div class="last-visit">
+          <div class="status">
+            <online-indicator :onlineStatus="user.status" /><span>{{ user.status ? "Онлайн" : "Офлайн" }}</span>
+          </div>
         <span>Последний раз был в сети</span>
         <span>{{ FormatDate(user.last_visit) }}</span>
       </div>
@@ -38,6 +41,7 @@ import AvatarApi from "@/Service/API/avatar.ts";
 import SelectAvatar from "@/components/SelectAvatar.vue";
 import FriendApi from "@/Service/API/friends.ts";
 import { FormatDate } from "@/helpers/FormatDate.ts";
+import OnlineIndicator from "@/UI/OnlineIndicator.vue";
 import UserApi from "../API/user";
 
 const props = defineProps({
