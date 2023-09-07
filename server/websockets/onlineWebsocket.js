@@ -15,7 +15,17 @@ function createOnlineStatusWebsocket() {
     });
     ws.on("close", async (e) => {
       console.log('disconnected')
-      await UserRepository.changeOnlineStatus(ws.id, 0);
+      setTimeout(() => {
+        let find = false
+        wssOnlineStatus.clients.forEach((client) => {
+          if(client.id == ws.id) {
+            find = true
+          }
+        })
+        if(!find) {
+          UserRepository.changeOnlineStatus(ws.id, 0);
+        }
+      }, 3000)
     });
   });
 }
