@@ -5,10 +5,11 @@ class FriendsRepository {
     await db.query(`INSERT INTO friends (whose, id, status) values ($1, $2, 0)`, [myId, id]);
   }
   async getFriendList(id) {
-    const friendList = await db.any(
-      `SELECT a.name, a.surname, a.img, a.id 
-          FROM users AS a, friends AS b
-          WHERE b.whose = $1 AND a.id = b.id AND b.status = 1`,
+    const friendList = await db.query(
+      `SELECT name, surname, img, users.id, online_status.status FROM users 
+        JOIN friends ON users.id = friends.id 
+        JOIN online_status ON users.id = online_status.user_id 
+        WHERE friends.whose = $1 AND friends.status = 1`,
       [id]
     );
     return friendList;
