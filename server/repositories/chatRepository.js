@@ -38,7 +38,11 @@ class ChatRepository {
   }
   async getUsersInfo(user_1, user_2) {
     const user = await db.query(`SELECT id AS user_id, name, surname, img FROM users WHERE id = $1 OR id = $2`, [user_1, user_2])
+    if(user.length !== 2) {
+      return { error: 'user not found' }
+    } else {
     return user
+    }
   }
 }
 

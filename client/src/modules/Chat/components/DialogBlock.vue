@@ -1,5 +1,6 @@
 <template>
-  <div class="chat-title">Диалог с {{ titleMessage }}</div>
+  <div v-if="users.length">
+    <div class="chat-title">Диалог с {{ titleMessage }}</div>
   <div class="chat">
     <div class="message" v-for="message in chatMessages" :key="message.message_id">
       <router-link :to="{ path: `/${message.user_id}` }" class="message-sender">
@@ -12,6 +13,8 @@
     <v-textarea no-resize rows="2" v-model="textMessage"></v-textarea>
     <v-btn @click="sendMessage">Отправить</v-btn>
   </div>
+  </div>
+  <div v-else>Не удалось найти пользователя</div>
 </template>
 <script setup lang="ts">
 import { onMounted, computed, ref } from "vue";
