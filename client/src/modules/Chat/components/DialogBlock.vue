@@ -27,8 +27,8 @@ import { getImageUrl } from '@/helpers/getImageUrl.ts'
 
 const emit = defineEmits(["updateChats"]);
 const props = defineProps({
-  chats: Array,
   friends: Array,
+  chatItem: Object
 });
 
 const textMessage = ref("");
@@ -69,15 +69,11 @@ const titleMessage = computed(() => {
     return filteredUsers.length > 1 ? "Групповой чат" : `${filteredUsers[0].name} ${filteredUsers[0].surname}`;
   }
 });
-function checkForChatExisting(id) {
-  return props.chats.find((chat) => chat.user_id == id);
-}
 async function getChatInfo(otherUserId) {
-  const isChatExisting = checkForChatExisting(otherUserId);
   const usersInfo = await ChatApi.getUsersInfo(Number(otherUserId), userStore.getUser.id);
   users.value = usersInfo;
-  if (isChatExisting) {
-    const messages = await ChatApi.getAllMessages(Number(isChatExisting.chat_id));
+  if (props.chatItem) {
+    const messages = await ChatApi.getAllMessages(Number(props.chatItem.chat_id));
     chatMessages.value = messages;
   }
 }

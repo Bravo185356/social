@@ -19,7 +19,7 @@
         </div>
       </div>
     </div>
-    <dialog-block @update-chats="updateChats" :chats="chatList" v-if="route.query.id" />
+    <dialog-block :chatItem="chatItem" @update-chats="updateChats" v-if="route.query.id" />
   </div>
 </template>
 <script setup lang="ts">
@@ -60,6 +60,9 @@ function redirectToChat(userId, chatId) {
 async function showFriends() {
   showFriendList.value = !showFriendList.value;
 }
+const chatItem = computed(() => {
+  return chatList.value.find(chat => chat.user_id == route.query.id)
+})
 const filteredFriendList = computed(() => {
   return props.friends.filter((friend) => !props.chats.find((chat) => chat.user_id == friend.id));
 });
