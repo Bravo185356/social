@@ -40,10 +40,11 @@ onBeforeRouteUpdate(async (to, from) => {
 .friend-item {
   display: flex;
   align-items: center;
-  background-color: rgb(224, 226, 255);
+  background-color: #D9D9D9;
   padding: 7px;
   border-radius: 5px;
-  gap: 10px;
+  font-size: 20px;
+  gap: 20px;
   box-shadow: 0px 0px 2px rgb(124, 124, 124);
 }
 .friend-avatar {

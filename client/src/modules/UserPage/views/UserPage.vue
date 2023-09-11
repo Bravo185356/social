@@ -1,5 +1,5 @@
 <template>
-  <div class="user-wrapper body">
+  <div class="user-info-body body">
     <div class="user-body">
       <user-info :user="props.user" />
       <div class="profile-body">
@@ -21,22 +21,19 @@ const props = defineProps({
 });
 </script>
 <style scoped lang="scss">
-.user-wrapper {
-  display: flex;
-  justify-content: center;
+.body {
+  flex: 0 1 1325px;
 }
 .user-body {
   display: flex;
   flex-direction: column;
-  flex: 0 1 1000px;
 }
 .profile-body {
   display: grid;
   column-gap: 20px;
-  border-top: 1px solid gray;
-  padding-top: 10px;
-  margin-top: 30px;
-  grid-template: 1fr / minmax(100px, 200px) 1fr;
+  margin-top: 25px;
+  grid-template: 1fr / minmax(200px, 340px) 1fr;
+  gap: 69px;
 }
 .v-overlay__content {
   width: auto;

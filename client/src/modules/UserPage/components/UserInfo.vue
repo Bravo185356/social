@@ -5,30 +5,29 @@
     @update-avatar="updateAvatar"
   />
   <div class="profile-header">
-    <div>
+    <div class="profile-header__row">
       <div class="avatar">
         <img :src="getImageUrl(user.img)" alt="Аватар" />
       </div>
-      <div v-if="user.id !== userStore.getUser.id">
-        <v-btn v-if="user.friend_status === 0">Отменить запрос</v-btn>
-        <v-btn v-else-if="user.friend_status === 1">Удалить из друзей</v-btn>
-        <v-btn v-else @click="sendFriendRequest">Добавить в друзья</v-btn>
+      <div class="info">
+        <div class="name">{{ user.name }} {{ user.surname }}</div>
+        <div class="city">Город {{ user.city }}</div>
       </div>
-      <v-btn v-if="route.params.id == userStore.getUser.id" @click="selectAvatarVisible = true">Сменить аватар</v-btn>
-    </div>
-    <div class="info">
-      <div class="name">{{ user.name }} {{ user.surname }}</div>
-      <div v-if="user.status || route.params.id == userStore.getUser.id" class="status">Online</div>
-      <div class="city">Город {{ user.city }}</div>
-    </div>
-    <div>
       <div class="last-visit">
-          <div class="status">
-            <online-indicator :onlineStatus="user.status" /><span>{{ user.status ? "Онлайн" : "Офлайн" }}</span>
-          </div>
-        <span>Последний раз был в сети</span>
-        <span>{{ FormatDate(user.last_visit) }}</span>
+        <div class="status">
+          <online-indicator :onlineStatus="user.status" /><span>{{ user.status ? "Онлайн" : "Офлайн" }}</span>
+        </div>
+        <div>Последний раз был в сети</div>
+        <div>{{ FormatDate(user.last_visit) }}</div>
       </div>
+    </div>
+    <div class="profile-header__button">
+      <blue-button v-if="user.friend_status === 0">Отменить запрос</blue-button>
+      <blue-button v-else-if="user.friend_status === 1">Удалить из друзей</blue-button>
+      <blue-button v-else-if="user.id === userStore.getUser.id">
+        <img src="../../../assets/icons/edit.svg" />Редактировать профиль
+      </blue-button>
+      <blue-button v-else @click="sendFriendRequest">Добавить в друзья</blue-button>
     </div>
   </div>
 </template>
@@ -43,6 +42,7 @@ import FriendApi from "@/Service/API/friends.ts";
 import { FormatDate } from "@/helpers/FormatDate.ts";
 import OnlineIndicator from "@/UI/OnlineIndicator.vue";
 import UserApi from "../API/user";
+import BlueButton from '@/UI/BlueButton.vue'
 
 const props = defineProps({
   user: Object,
@@ -67,16 +67,28 @@ onBeforeRouteUpdate(async (to, from) => {
 </script>
 <style scoped>
 .profile-header {
+  padding: 28px 40px 35px 40px;
+  background-color: white;
+  border-radius: 15px;
+  font-size: 20px;
+  border: 1px solid #000000;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  font-family: "Montserrat", sans-serif;
+}
+.profile-header__row {
   display: flex;
-  padding: 20px;
-  background-color: rgb(224, 226, 255);
-  border-radius: 10px;
-  gap: 20px;
+  margin-bottom: 16px;
+  gap: 70px;
+}
+.profile-header__button {
+  display: flex;
+  justify-content: end;
 }
 .info {
   display: grid;
   align-self: start;
   flex: 1 1 auto;
+  row-gap: 30px;
 }
 .name {
   font-size: 20px;
@@ -87,8 +99,8 @@ onBeforeRouteUpdate(async (to, from) => {
 }
 .avatar {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 258px;
+  height: 258px;
   margin-bottom: 10px;
   & > img {
     position: absolute;
@@ -97,9 +109,14 @@ onBeforeRouteUpdate(async (to, from) => {
     object-fit: cover;
   }
 }
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 20px;
+  margin-bottom: 10px;
+}
 .last-visit {
-  display: grid;
   text-align: right;
 }
 </style>
-../../../helpers/FormatDate@/Service/API/avatar
