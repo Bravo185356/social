@@ -8,13 +8,13 @@ class SearchRepository {
     );
     return userList;
   }
-  async getUsersWithFilter(name, surname) {
+  async getUsersWithFilter(filters) {
     const userList = await db.query(
       `SELECT id, name, surname, city, img, status FROM users
         JOIN online_status ON users.id = online_status.user_id
-        WHERE (name = $1 AND surname = $2) 
-        OR (name LIKE CONCAT($1, '%') OR surname LIKE CONCAT($1, '%'))`,
-      [name, surname]
+        WHERE ((name = $1 AND surname = $2) 
+        OR (name LIKE CONCAT($1, '%') OR surname LIKE CONCAT($1, '%'))) AND city LIKE CONCAT($3, '%')`,
+      [filters.name, filters.surname, filters.city]
     );
     return userList;
   }

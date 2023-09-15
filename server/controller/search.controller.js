@@ -6,8 +6,8 @@ class SearchController {
     res.json(userList);
   }
   async getUsersWithFilter(req, res) {
-    const { name, surname = null } = req.query;
-    const userList = await SearchRepository.getUsersWithFilter(name, surname)
+    const { filters } = req.query;
+    const userList = await SearchRepository.getUsersWithFilter(filters)
     res.json(userList);
   }
   async getUserInfo(req, res) {
