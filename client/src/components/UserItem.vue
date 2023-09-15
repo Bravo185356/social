@@ -2,6 +2,7 @@
   <div class="user-item">
     <div class="user-body">
       <div class="user-image">
+        <online-indicator :withAvatar="true" :onlineStatus="user.status" />
         <img :src="getImageUrl(user.img)" alt="Аватар" />
       </div>
       <div class="user-info">
@@ -18,6 +19,7 @@ import { computed, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/user.ts";
 import { getImageUrl } from "@/helpers/getImageUrl.ts";
+import OnlineIndicator from "@/UI/OnlineIndicator.vue"
 
 const props = defineProps({
   user: { type: Object },

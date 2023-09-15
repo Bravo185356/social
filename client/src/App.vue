@@ -3,7 +3,9 @@
   <page-loader v-if="isLoadingStore.isLoading" />
   <main :class="{ content: userStore.isLogined, 'content-not-auth': !userStore.isLogined }">
     <left-sidebar v-if="userStore.isLogined" />
-    <router-view />
+    <div class="wrapper">
+      <router-view />
+    </div>
   </main>
 </template>
 <script setup lang="ts">
@@ -39,8 +41,18 @@ onMounted(async () => {
 </script>
 
 <style lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto:wght@400;700&display=swap");
 * {
-  color: rgb(44, 44, 44);
+  color: black;
+}
+input:focus {
+  border: none;
+  outline: none;
+}
+.wrapper {
+  display: flex;
+  justify-content: center;
+  flex: 1 1 auto;
 }
 .main {
   position: relative;
@@ -58,8 +70,9 @@ onMounted(async () => {
   background-color: white;
 }
 .body {
-  padding: 40px 80px;
+  position: relative;
   flex: 1 1 auto;
+  padding: 131px 50px;
 }
 .content {
   display: flex;
@@ -76,18 +89,11 @@ onMounted(async () => {
   font-size: 18px;
   letter-spacing: 1.5px;
   background-color: white;
-  padding: 10px;
   z-index: 100;
-  box-shadow: 0px 0px 7px rgb(196, 196, 196);
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25);
 }
 .sidebar-content {
   position: fixed;
-}
-a {
-  transition: color 0.2s ease-in;
-  &:hover {
-    color: #1976d2;
-  }
 }
 .auth-wrapper {
   margin: 0px auto;
