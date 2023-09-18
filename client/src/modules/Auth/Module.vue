@@ -15,3 +15,9 @@ onMounted(() => {
   }
 });
 </script>
+<style>
+.submit-btn {
+  width: 100%;
+  margin-top: 10px;
+}
+</style>

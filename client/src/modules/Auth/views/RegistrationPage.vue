@@ -1,5 +1,6 @@
 <template>
-  <div class="auth-wrapper">
+  <div class="auth-wrapper body">
+    <h1>Регистрация</h1>
     <registration-form />
   </div>
 </template>

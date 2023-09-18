@@ -81,7 +81,9 @@ input:focus {
 }
 .content-not-auth {
   text-align: center;
-  padding-top: 100px;
+}
+.v-messages__message {
+  text-align: left;
 }
 .sidebar-wrap {
   position: relative;
