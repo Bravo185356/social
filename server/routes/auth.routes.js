@@ -16,7 +16,7 @@ router.post(
         }
       })
       .isLength({ min: 6 }),
-    check("password", "Пароль должен содержать минимум 4 символа").trim().isLength({ min: 4 }),
+    check("password", "Пароль должен содержать минимум 6 символов").trim().isLength({ min: 6 }),
     check("confirmPassword").custom((value, { req }) => {
       if (value !== req.body.password) {
         throw new Error("Пароли не совпадают");
