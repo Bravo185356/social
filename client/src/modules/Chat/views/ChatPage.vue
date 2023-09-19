@@ -12,8 +12,8 @@
           </li>
         </ul>
       </div>
-      <div class="chat-list" v-for="chat in chatList" :key="chat.chat_id">
-        <div class="chat-item" :class="{ active: route.query.id == chat.user_id }" @click="redirectToChat(chat.user_id, chat.chat_id)">
+      <div class="chat-list">
+        <div v-for="chat in chatList" :key="chat.chat_id" class="chat-item" :class="{ active: route.query.id == chat.user_id }" @click="redirectToChat(chat.user_id, chat.chat_id)">
           <img :src="getImageUrl(chat.img)" alt="" />
           {{ chat.name }} {{ chat.surname }}
         </div>
@@ -75,10 +75,15 @@ onBeforeRouteUpdate((to, from) => {
 .body {
   display: flex;
   padding: 0;
+  max-height: calc(100vh - 60px);
 }
 .chats-block {
-  flex: 0 1 500px;
+  flex: 0 1 400px;
   border-right: 2px solid #C7C3C3;
+}
+.chat-list {
+  overflow-y: auto;
+  max-height: calc(100vh - 60px - 98px);
 }
 .chats-header {
   display: flex;

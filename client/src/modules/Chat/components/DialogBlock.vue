@@ -1,5 +1,5 @@
 <template>
-  <div v-if="users.length">
+  <div class="chat-body" v-if="users.length">
     <div class="chat-title">Диалог с {{ titleMessage }}</div>
     <div class="chat">
       <div class="message" v-for="message in chatMessages" :key="message.message_id">
@@ -23,12 +23,12 @@ import { useRoute, onBeforeRouteUpdate } from "vue-router";
 import { useUserStore } from "@/stores/user.ts";
 import { useWebsocketsStore } from "@/stores/websockets.ts";
 import ChatApi from "../API/chat.ts";
-import { getImageUrl } from '@/helpers/getImageUrl.ts'
+import { getImageUrl } from "@/helpers/getImageUrl.ts";
 
 const emit = defineEmits(["updateChats"]);
 const props = defineProps({
   friends: Array,
-  chatItem: Object
+  chatItem: Object,
 });
 
 const textMessage = ref("");
@@ -48,7 +48,7 @@ function getUserInfo(id) {
 async function sendMessage() {
   let body = {
     type: "newMessage",
-    chatId: Number(checkForChatExisting(route.query.id).chat_id),
+    chatId: Number(props.chatItem.chat_id),
     myId: userStore.getUser.id,
     userId: Number(route.query.id),
     content: textMessage.value,
@@ -79,7 +79,7 @@ async function getChatInfo(otherUserId) {
 }
 onBeforeRouteUpdate(async (to, from) => {
   if (to.query.id) {
-    getChatInfo(to.query.id)
+    getChatInfo(to.query.id);
   }
 });
 onMounted(async () => {
@@ -87,22 +87,35 @@ onMounted(async () => {
     const message = JSON.parse(e.data);
     chatMessages.value.push(message.message);
   };
-  getChatInfo(route.query.id)
+  getChatInfo(route.query.id);
 });
 </script>
 <style scoped lang="scss">
+#app::-webkit-scrollbar {
+  width: 0;
+}
+.chat-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 0px 20px;
+}
 .chat {
   display: grid;
+  grid-template-rows: repeat(auto-fit, minmax(100px, max-content));
   gap: 20px;
   max-width: 981px;
-  padding: 0px 20px 150px 20px;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 }
 .chat-title {
   padding-top: 60px;
   background-color: white;
   text-align: center;
   font-size: 22px;
-  width: 981px;
   margin-bottom: 20px;
 }
 .message {
@@ -118,9 +131,6 @@ onMounted(async () => {
   }
 }
 .input-block {
-  position: fixed;
-  padding: 10px;
-  width: 981px;
-  bottom: 0;
+  padding: 10px 0px;
 }
 </style>
