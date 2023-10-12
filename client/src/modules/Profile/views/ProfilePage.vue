@@ -8,7 +8,6 @@
     <profile-info />
     <div class="profile-actions">
       <v-btn @click="selectAvatarVisible = true">Сменить аватар</v-btn>
-      <v-btn @click="logout">Выйти</v-btn>
       <v-btn @click="deleteUser">Удалить страницу</v-btn>
     </div>
   </div>
@@ -20,28 +19,18 @@ import UserApi from "@/Service/API/user.ts";
 import { useUserStore } from "@/stores/user.ts";
 import { useRouter } from "vue-router";
 import SelectAvatar from "@/components/SelectAvatar.vue";
-import { useWebsocketsStore } from '@/stores/websockets.ts'
 
 const router = useRouter();
 const userStore = useUserStore();
-const websocketsStore = useWebsocketsStore()
 
 const selectAvatarVisible = ref(false);
 
 function updateAvatar(img) {
   userStore.changeField('img', img)
 }
-function logout() {
-  localStorage.removeItem("token");
-  userStore.$reset();
-  router.push("/auth/login");
-  for (const websocket in websocketsStore.getWebsockets) {
-    websocketsStore.getWebsockets[websocket].close()
-  }
-}
 async function deleteUser() {
   UserApi.deleteUser(userStore.getUser.id);
-  logout();
+  userStore.logout();
 }
 </script>
 <style scoped lang="scss">
