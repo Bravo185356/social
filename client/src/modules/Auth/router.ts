@@ -17,4 +17,4 @@ const moduleRoute = {
     ]
 }
 
-export default moduleRoute
+export const AuthRoutes = moduleRoute

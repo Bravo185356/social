@@ -21,4 +21,4 @@ const moduleRoute = {
   },
 };
 
-export default moduleRoute;
+export const UserPageRoutes = moduleRoute;

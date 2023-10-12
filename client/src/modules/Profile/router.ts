@@ -5,4 +5,4 @@ const moduleRoute = {
     component: ProfilePage,
 }
 
-export default moduleRoute
+export const ProfileRoutes = moduleRoute

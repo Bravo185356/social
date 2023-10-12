@@ -26,4 +26,4 @@ const moduleRoute = {
   ],
 };
 
-export default moduleRoute;
+export const ChatRoutes = moduleRoute;
